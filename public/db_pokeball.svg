@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="512" height="512" viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg">
+    <defs>
+        <clipPath id="dbInnerClip">
+            <rect x="73.1328" y="73.1328" width="365.7364" height="365.7364" />
+        </clipPath>
+    </defs>
+
+    <rect width="512" height="512" fill="#FFFFFF" />
+
+    <g clip-path="url(#dbgInnerClip)">
+        <polygon points="73.1328,73.1328 438.8692,73.1328 73.1328,438.8692" fill="#E60012" />
+    </g>
+
+    <path
+        d="M20.2447,121.48881h101.2325V20.2445H20.2447v101.2436ZM0,0h141.7323v141.7324H0V0ZM30.58,107.7151l55.2838-73.6974h25.3103l-55.284,73.6974h-25.3101Z"
+        transform="scale(3.6124440229926416)"
+        fill="#1e2a78"
+    />
+
+    <circle cx="256" cy="256" r="64" fill="#1E2A78" />
+    <circle cx="256" cy="256" r="49" fill="#FFFFFF" />
+    <circle cx="256" cy="256" r="39" fill="#1E2A78" />
+    <circle cx="256" cy="256" r="28" fill="#FFFFFF" />
+</svg>
