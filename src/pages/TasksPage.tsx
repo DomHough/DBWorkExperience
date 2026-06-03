@@ -101,34 +101,21 @@ export function TasksPage({ onSelectedApiChange }: TasksPageProps) {
   }, [onSelectedApiChange, state.selectedApi])
 
   const selectedApi = state.selectedApi
-  const tasks = selectedApi ? TASKS_BY_API[selectedApi] : []
+  const tasks = selectedApi ? TASKS_BY_API[selectedApi] : null
   const progress = selectedApi ? state.progress[selectedApi] : null
 
   const visibleTasks = useMemo(() => {
-    if (!selectedApi || !progress) {
+    if (!tasks || !progress) {
       return []
     }
 
     return tasks.filter((task) => isTaskUnlocked(task, progress))
-  }, [selectedApi, progress, tasks])
+  }, [progress, tasks])
 
   const activeTask =
-    activeTaskId && selectedApi
-      ? TASKS_BY_API[selectedApi].find((task) => task.id === activeTaskId) ?? null
+    activeTaskId
+      ? visibleTasks.find((task) => task.id === activeTaskId) ?? null
       : null
-  useEffect(() => {
-    if (!selectedApi || !activeTaskId || !progress) {
-      return
-    }
-
-    const stillVisible = TASKS_BY_API[selectedApi]
-      .filter((task) => isTaskUnlocked(task, progress))
-      .some((task) => task.id === activeTaskId)
-
-    if (!stillVisible) {
-      setActiveTaskId(null)
-    }
-  }, [activeTaskId, progress, selectedApi])
 
   function chooseApi(api: ApiKey) {
     setFeedback('')
