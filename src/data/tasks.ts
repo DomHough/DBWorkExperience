@@ -10,6 +10,7 @@ export interface TaskDefinition {
   title: string
   description: string
   acceptanceCriteria: string[]
+  guideSlugs?: string[]
   priority: PriorityTag
   difficulty: DifficultyTag
   dependencies?: string[]
@@ -44,156 +45,158 @@ export const KANBAN_COLUMNS: Array<{ key: TaskStatus; label: string }> = [
 
 export const TASKS: TaskDefinition[] = [
   {
-    id: 'poke-fetch-list',
+    id: 'poke-change-background',
     api: 'pokeapi',
-    title: 'Fetch Pokemon list',
+    title: 'Change the background colour',
     description:
-      'Build a basic service call that loads Pokemon names from the API and handles loading/error states.',
+      'Update one of the main page backgrounds with Tailwind classes so the app looks visibly different.',
     acceptanceCriteria: [
-      'List request function is in a reusable service module',
-      'Loading and error states are visible in the UI',
-      'At least 20 Pokemon names render in a clean list',
+      'A background colour has been changed using Tailwind utility classes',
+      'Text still has enough contrast to stay readable',
+      'The change is visible on a main screen such as Home, Tasks, or Guides',
     ],
+    guideSlugs: ['changing-background-colour', 'styling-with-tailwind'],
     priority: 'high',
     difficulty: 'beginner',
   },
   {
-    id: 'poke-detail-view',
+    id: 'poke-create-page',
     api: 'pokeapi',
-    title: 'Pokemon detail view',
+    title: 'Create a new page',
     description:
-      'Add a detail panel for one Pokemon that shows basic stats and type information.',
+      'Add a simple page component and connect it to the router so the app has one more screen.',
     acceptanceCriteria: [
-      'Selecting a Pokemon loads detail data',
-      'Types and at least two base stats are shown',
-      'Invalid Pokemon IDs are handled safely',
+      'A new page component exists in `src/pages`',
+      'A matching route has been added in `src/App.tsx`',
+      'The page renders a heading and a short paragraph',
     ],
-    priority: 'high',
-    difficulty: 'intermediate',
-    dependencies: ['poke-fetch-list'],
-  },
-  {
-    id: 'poke-search-filter',
-    api: 'pokeapi',
-    title: 'Search and filter',
-    description:
-      'Allow users to search by name and filter the currently loaded list quickly.',
-    acceptanceCriteria: [
-      'Search input filters list by partial name',
-      'Clear action resets filters',
-      'Filtering does not trigger unnecessary API calls',
-    ],
-    priority: 'medium',
-    difficulty: 'intermediate',
-    dependencies: ['poke-fetch-list'],
-  },
-  {
-    id: 'poke-team-builder',
-    api: 'pokeapi',
-    title: 'Simple team builder',
-    description:
-      'Let users add and remove Pokemon from a six-slot team using data from the list/detail features.',
-    acceptanceCriteria: [
-      'Users can add up to six Pokemon',
-      'Users can remove a Pokemon from any slot',
-      'Duplicate handling is defined and implemented',
-    ],
-    priority: 'medium',
-    difficulty: 'advanced',
-    dependencies: ['poke-detail-view', 'poke-search-filter'],
-    unlockRule: 'all',
-  },
-  {
-    id: 'poke-favourites',
-    api: 'pokeapi',
-    title: 'Favourite Pokemon',
-    description:
-      'Add a way for users to star Pokemon and show favourites in a dedicated section.',
-    acceptanceCriteria: [
-      'A favourite toggle exists on list or detail items',
-      'Favourite state persists in browser storage',
-      'A favourites-only view is available',
-    ],
-    priority: 'low',
-    difficulty: 'intermediate',
-    dependencies: ['poke-detail-view', 'poke-search-filter'],
-    unlockRule: 'any',
-  },
-  {
-    id: 'swapi-fetch-films',
-    api: 'swapi',
-    title: 'Fetch films list',
-    description:
-      'Create a reusable request for films and render core details like title and release date.',
-    acceptanceCriteria: [
-      'Films endpoint is called from a service function',
-      'UI shows title and release date for each film',
-      'Loading and error states are present',
-    ],
+    guideSlugs: ['creating-a-route-and-page', 'react-basics'],
     priority: 'high',
     difficulty: 'beginner',
   },
   {
-    id: 'swapi-film-detail',
-    api: 'swapi',
-    title: 'Film detail screen',
+    id: 'poke-add-navbar-link',
+    api: 'pokeapi',
+    title: 'Add a navbar link to the new page',
     description:
-      'Display one film in detail with opening crawl and key metadata in a readable layout.',
+      'Extend the navbar so users can open the new page without typing the URL manually.',
     acceptanceCriteria: [
-      'Film detail can be opened from the list',
-      'Opening crawl text is readable',
-      'At least three metadata fields are displayed',
+      'A new navigation item has been added to the navbar',
+      'Clicking the link opens the new page without a full refresh',
+      'The active page styling still works when the new link is selected',
     ],
-    priority: 'high',
-    difficulty: 'intermediate',
-    dependencies: ['swapi-fetch-films'],
-  },
-  {
-    id: 'swapi-character-list',
-    api: 'swapi',
-    title: 'Character explorer',
-    description:
-      'Show characters for a selected film and support pagination for long lists.',
-    acceptanceCriteria: [
-      'Characters for a selected film are displayed',
-      'Pagination or incremental loading is implemented',
-      'Character cards include name and at least one extra field',
-    ],
+    guideSlugs: ['adding-navigation-links', 'creating-a-route-and-page'],
     priority: 'medium',
-    difficulty: 'intermediate',
-    dependencies: ['swapi-film-detail'],
+    difficulty: 'beginner',
+    dependencies: ['poke-create-page'],
   },
   {
-    id: 'swapi-comparison-view',
-    api: 'swapi',
-    title: 'Character comparison',
+    id: 'poke-update-copy',
+    api: 'pokeapi',
+    title: 'Update some page text',
     description:
-      'Allow users to compare two selected characters side by side for key attributes.',
+      'Replace some starter copy with your own wording so the site begins to feel like your project.',
     acceptanceCriteria: [
-      'Users can select two characters',
-      'Comparison layout shows both values clearly',
-      'Empty selection states are handled',
+      'At least one heading or paragraph has been changed',
+      'The new text explains the page or project more clearly',
+      'The content still fits the layout on mobile and desktop',
     ],
+    guideSlugs: ['editing-page-content', 'react-basics'],
     priority: 'medium',
-    difficulty: 'advanced',
-    dependencies: ['swapi-character-list', 'swapi-film-detail'],
-    unlockRule: 'all',
+    difficulty: 'beginner',
   },
   {
-    id: 'swapi-saved-search',
-    api: 'swapi',
-    title: 'Saved film filters',
+    id: 'poke-add-button',
+    api: 'pokeapi',
+    title: 'Add a simple button',
     description:
-      'Persist user filter choices for films so they return on refresh.',
+      'Place a button on a page to practise JSX structure and Tailwind button styling.',
     acceptanceCriteria: [
-      'At least one filter can be saved',
-      'Filter state restores after refresh',
-      'Users can clear saved filters',
+      'A button has been added to one of the pages',
+      'The button text makes its purpose clear',
+      'The button includes hover or focus styles using Tailwind classes',
     ],
+    guideSlugs: ['adding-a-button', 'styling-with-tailwind', 'react-basics'],
     priority: 'low',
-    difficulty: 'intermediate',
-    dependencies: ['swapi-film-detail', 'swapi-character-list'],
-    unlockRule: 'any',
+    difficulty: 'beginner',
+    dependencies: ['poke-create-page'],
+  },
+  {
+    id: 'swapi-change-background',
+    api: 'swapi',
+    title: 'Change the background colour',
+    description:
+      'Update one of the main page backgrounds with Tailwind classes so the app looks visibly different.',
+    acceptanceCriteria: [
+      'A background colour has been changed using Tailwind utility classes',
+      'Text still has enough contrast to stay readable',
+      'The change is visible on a main screen such as Home, Tasks, or Guides',
+    ],
+    guideSlugs: ['changing-background-colour', 'styling-with-tailwind'],
+    priority: 'high',
+    difficulty: 'beginner',
+  },
+  {
+    id: 'swapi-create-page',
+    api: 'swapi',
+    title: 'Create a new page',
+    description:
+      'Add a simple page component and connect it to the router so the app has one more screen.',
+    acceptanceCriteria: [
+      'A new page component exists in `src/pages`',
+      'A matching route has been added in `src/App.tsx`',
+      'The page renders a heading and a short paragraph',
+    ],
+    guideSlugs: ['creating-a-route-and-page', 'react-basics'],
+    priority: 'high',
+    difficulty: 'beginner',
+  },
+  {
+    id: 'swapi-add-navbar-link',
+    api: 'swapi',
+    title: 'Add a navbar link to the new page',
+    description:
+      'Extend the navbar so users can open the new page without typing the URL manually.',
+    acceptanceCriteria: [
+      'A new navigation item has been added to the navbar',
+      'Clicking the link opens the new page without a full refresh',
+      'The active page styling still works when the new link is selected',
+    ],
+    guideSlugs: ['adding-navigation-links', 'creating-a-route-and-page'],
+    priority: 'medium',
+    difficulty: 'beginner',
+    dependencies: ['swapi-create-page'],
+  },
+  {
+    id: 'swapi-update-copy',
+    api: 'swapi',
+    title: 'Update some page text',
+    description:
+      'Replace some starter copy with your own wording so the site begins to feel like your project.',
+    acceptanceCriteria: [
+      'At least one heading or paragraph has been changed',
+      'The new text explains the page or project more clearly',
+      'The content still fits the layout on mobile and desktop',
+    ],
+    guideSlugs: ['editing-page-content', 'react-basics'],
+    priority: 'medium',
+    difficulty: 'beginner',
+  },
+  {
+    id: 'swapi-add-button',
+    api: 'swapi',
+    title: 'Add a simple button',
+    description:
+      'Place a button on a page to practise JSX structure and Tailwind button styling.',
+    acceptanceCriteria: [
+      'A button has been added to one of the pages',
+      'The button text makes its purpose clear',
+      'The button includes hover or focus styles using Tailwind classes',
+    ],
+    guideSlugs: ['adding-a-button', 'styling-with-tailwind', 'react-basics'],
+    priority: 'low',
+    difficulty: 'beginner',
+    dependencies: ['swapi-create-page'],
   },
 ]
 

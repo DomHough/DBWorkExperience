@@ -10,7 +10,11 @@ export interface GuideDefinition extends GuideMeta {
 }
 
 const GUIDE_META: GuideMeta[] = [
+  { slug: 'changing-background-colour', category: 'Styling' },
   { slug: 'creating-a-route-and-page', category: 'Project structure' },
+  { slug: 'adding-navigation-links', category: 'Navigation' },
+  { slug: 'editing-page-content', category: 'Content' },
+  { slug: 'adding-a-button', category: 'Components' },
   { slug: 'styling-with-tailwind', category: 'Styling' },
   { slug: 'react-basics', category: 'React' },
   { slug: 'fetching-api-data', category: 'Data fetching' },

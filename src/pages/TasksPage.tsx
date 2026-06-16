@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useState } from 'react'
+import { Link } from 'react-router-dom'
 import type {
   ApiKey,
   ApiTaskProgress,
@@ -14,6 +15,7 @@ import {
   loadTaskBoardState,
   saveTaskBoardState,
 } from '../data/tasks'
+import { GUIDES } from '../data/guides'
 
 function isTaskUnlocked(task: TaskDefinition, apiProgress: ApiTaskProgress): boolean {
   if (!task.dependencies?.length) {
@@ -42,10 +44,10 @@ function toTitleCase(value: string): string {
 
 function apiOptionDescription(api: ApiKey): string {
   if (api === 'pokeapi') {
-    return 'Lists, detail views, search, and feature work built around Pokemon data.'
+    return 'Five beginner tasks you can complete while building a Pokemon project.'
   }
 
-  return 'Film, character, and comparison tasks built around Star Wars API data.'
+  return 'Five beginner tasks you can complete while building a Star Wars project.'
 }
 
 function columnDescription(status: TaskStatus): string {
@@ -116,6 +118,9 @@ export function TasksPage({ onSelectedApiChange }: TasksPageProps) {
     activeTaskId
       ? visibleTasks.find((task) => task.id === activeTaskId) ?? null
       : null
+  const relatedGuides = activeTask
+    ? GUIDES.filter((guide) => activeTask.guideSlugs?.includes(guide.slug))
+    : []
 
   function chooseApi(api: ApiKey) {
     setFeedback('')
@@ -321,7 +326,7 @@ export function TasksPage({ onSelectedApiChange }: TasksPageProps) {
             role="dialog"
             aria-modal="true"
             aria-labelledby="task-modal-title"
-            className="grid w-full max-w-2xl overflow-hidden rounded-3xl border border-slate-200 bg-white shadow-2xl shadow-slate-900/30 max-h-[calc(100dvh-2rem)]"
+            className="w-full max-w-2xl overflow-y-auto rounded-3xl border border-slate-200 bg-white shadow-2xl shadow-slate-900/30 max-h-[calc(100dvh-2rem)]"
             onClick={(event) => event.stopPropagation()}
           >
             <section className="border-b border-slate-200 bg-slate-50 px-5 py-5">
@@ -374,11 +379,41 @@ export function TasksPage({ onSelectedApiChange }: TasksPageProps) {
               </div>
             </section>
 
-            <div className="grid gap-4 overflow-y-auto p-5">
+            <div className="grid gap-4 p-5">
               <section className="rounded-2xl border border-slate-200 bg-white p-4 shadow-md shadow-slate-900/10">
                 <h3 className="mb-2 text-base font-semibold text-slate-900">Description</h3>
                 <p className="leading-relaxed text-slate-700">{activeTask.description}</p>
               </section>
+
+              {relatedGuides.length > 0 ? (
+                <section className="rounded-2xl border border-slate-200 bg-slate-50/70 p-3 shadow-sm shadow-slate-900/5">
+                  <h3 className="mb-2 text-sm font-semibold text-slate-900">
+                    Related Guides
+                  </h3>
+                  <div className="grid gap-2">
+                    {relatedGuides.map((guide) => (
+                      <Link
+                        key={guide.slug}
+                        className="rounded-xl border border-slate-200 bg-white px-3 py-3 hover:border-blue-200 hover:bg-slate-50"
+                        to={`/guides/${guide.slug}`}
+                        onClick={() => setActiveTaskId(null)}
+                      >
+                        <div className="flex flex-wrap items-center gap-2">
+                          <span className="rounded-full bg-slate-100 px-2.5 py-1 text-xs font-medium text-slate-600">
+                            {guide.category}
+                          </span>
+                        </div>
+                        <h4 className="mt-1 text-sm font-semibold text-slate-900">
+                          {guide.title}
+                        </h4>
+                        <p className="mt-1 text-sm leading-5 text-slate-600 line-clamp-2">
+                          {guide.description}
+                        </p>
+                      </Link>
+                    ))}
+                  </div>
+                </section>
+              ) : null}
 
               <section className="rounded-2xl border border-slate-200 bg-white p-4 shadow-md shadow-slate-900/10">
                 <h3 className="mb-3 text-base font-semibold text-slate-900">
