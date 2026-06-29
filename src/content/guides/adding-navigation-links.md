@@ -1,43 +1,68 @@
 # Adding navigation links
 
-Once a new page exists, the next step is giving users a way to reach it from the navbar.
+Once a page exists, the next step is giving users a clear way to reach it.
 
-## 1. Open the navbar component
+## Where navigation lives in this project
 
-In this project the main navigation lives in `src/components/Navbar.tsx`.
+The main navigation lives in `src/components/Navbar.tsx`.
 
-## 2. Add another `NavLink`
+Most new screen links should be added there once the route already exists.
 
-Copy the pattern already used for the other links.
+## 1. Create the route first
+
+Before adding a navbar link, make sure the page already exists in `src/App.tsx`.
+
+Example route:
+
+```tsx
+<Route path="/favourites" element={<FavouritesPage />} />
+```
+
+## 2. Add a `NavLink`
+
+Copy the existing pattern from the navbar.
 
 ```tsx
 <NavLink
-  to="/about"
+  to="/favourites"
   className={({ isActive }) =>
     isActive ? `${navBaseClass} bg-blue-100 text-blue-700` : navBaseClass
   }
 >
-  About
+  Favourites
 </NavLink>
 ```
 
-`NavLink` is useful here because it knows when the current page matches the link, so you can show an active style automatically.
+`NavLink` is useful because it can style the active page automatically.
 
-## 3. Match the route exactly
+## 3. Match the path exactly
 
-The `to` value must line up with the `path` you added in `src/App.tsx`.
+The `to` value in the navbar must match the `path` in `src/App.tsx`.
 
-- Route path: `"/about"`
-- Navbar link: `to="/about"`
+- route: `"/favourites"`
+- navbar: `to="/favourites"`
 
-If those two values do not match, the link will not open the page you expect.
+If they do not match, the link will not open the page you expect.
 
-## 4. Test the active state
+## 4. Keep the label short
 
-Click the new link and make sure it changes style in the same way as the other navigation items.
+Navigation labels should be short enough to scan quickly.
+
+Good examples:
+
+- `Tasks`
+- `Guides`
+- `Favourites`
+- `Team`
+- `Watchlist`
+
+## 5. Test active styling
+
+Open the new page and confirm the active state still looks correct.
 
 ## Common mistakes
 
-- Using `Link` when you meant to reuse the existing `NavLink` active styling.
-- Typing the wrong URL in `to`.
-- Adding the navigation item before the route exists.
+- Adding the navbar item before the route exists.
+- Using the wrong URL in `to`.
+- Using a long label that makes the navbar harder to scan.
+- Using `Link` when the existing navbar pattern expects `NavLink`.

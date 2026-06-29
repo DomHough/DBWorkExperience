@@ -1,10 +1,12 @@
 # Editing page content
 
-Changing text is a small task, but it is useful practice. It helps students get comfortable finding JSX and understanding which component controls which part of the screen.
+Changing text is a small task, but it is useful because it helps students learn where page content lives and how JSX is structured.
 
-## 1. Find the text in the right component
+## 1. Find the right component
 
-Open the page file that renders the text you want to change. For example, a heading might look like this:
+Open the file that renders the text you want to change.
+
+Example:
 
 ```tsx
 <h1 className="text-3xl font-semibold text-slate-900">Choose API Track</h1>
@@ -15,21 +17,31 @@ Open the page file that renders the text you want to change. For example, a head
 Edit the text between the tags.
 
 ```tsx
-<h1 className="text-3xl font-semibold text-slate-900">Build your first Pokemon page</h1>
+<h1 className="text-3xl font-semibold text-slate-900">Build your own film list</h1>
 ```
 
-Do the same for short paragraphs if you want the page to explain the project more clearly.
+You can also update paragraphs so the page explains the project more clearly.
 
-## 3. Keep the content short and readable
+## 3. Write for the actual feature
 
-Starter layouts are intentionally simple. If you add much longer text, check that it still looks good on smaller screens.
+As the project grows, the copy should match what the page really does.
 
-## 4. Refresh and review
+Examples:
 
-After editing the content, reload the page and make sure the new wording fits the design and still makes sense in context.
+- explain that the page shows a list
+- explain that items can be clicked for details
+- explain that search, favourites, or notes are available
+
+## 4. Keep it short
+
+This project is intentionally simple. Long blocks of text will make pages harder to scan and may break the layout.
+
+## 5. Re-check the page
+
+Refresh and make sure the new wording still fits on mobile and desktop.
 
 ## Common mistakes
 
-- Editing the wrong component and wondering why nothing changed.
-- Adding too much text and breaking the layout.
-- Forgetting that JSX text must stay inside one parent element.
+- Editing the wrong file.
+- Adding too much text.
+- Leaving old wording that no longer matches the page behaviour.

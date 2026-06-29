@@ -14,10 +14,15 @@ const GUIDE_META: GuideMeta[] = [
   { slug: 'creating-a-route-and-page', category: 'Project structure' },
   { slug: 'adding-navigation-links', category: 'Navigation' },
   { slug: 'editing-page-content', category: 'Content' },
+  { slug: 'changing-the-browser-tab-title', category: 'Content' },
   { slug: 'adding-a-button', category: 'Components' },
   { slug: 'styling-with-tailwind', category: 'Styling' },
   { slug: 'react-basics', category: 'React' },
   { slug: 'fetching-api-data', category: 'Data fetching' },
+  { slug: 'search-and-filtering', category: 'Data handling' },
+  { slug: 'working-with-lists-and-sorting', category: 'Data handling' },
+  { slug: 'saving-browser-data', category: 'Persistence' },
+  { slug: 'building-forms', category: 'Forms' },
   { slug: 'writing-better-prompts', category: 'AI workflow' },
 ]
 

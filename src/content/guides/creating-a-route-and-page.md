@@ -1,60 +1,69 @@
 # Creating a route and page
 
-When you want to add a new screen to the app, make one React component for the page and then connect it to the router.
+When you want a new screen, create a page component and connect it to the router.
 
-## 1. Create a page component
+This guide is useful for Session 1 starter tasks and later features such as detail pages, favourites pages, teams, or watchlists.
 
-Add a file inside `src/pages`. Keep the component focused on one screen.
+## 1. Create the page component
+
+Add a new file in `src/pages`.
 
 ```tsx
-export function AboutPage() {
+export function FavouritesPage() {
   return (
     <section className="grid gap-4">
-      <h1 className="text-3xl font-semibold text-slate-900">About</h1>
-      <p className="text-slate-700">This is a new page.</p>
+      <h1 className="text-3xl font-semibold text-slate-900">Favourites</h1>
+      <p className="text-slate-700">Your saved items will appear here.</p>
     </section>
   )
 }
 ```
 
-## 2. Import the page into `App.tsx`
-
-The app routes live in `src/App.tsx`, so import your new page there.
+## 2. Import it into `src/App.tsx`
 
 ```tsx
-import { AboutPage } from './pages/AboutPage'
+import { FavouritesPage } from './pages/FavouritesPage'
 ```
 
-## 3. Add a route
-
-Each route connects a URL to a React component.
+## 3. Add the route
 
 ```tsx
 <Routes>
-  <Route path="/" element={<HomePage />} />
-  <Route path="/about" element={<AboutPage />} />
+  <Route path="/" element={<HomePage logoSrc={logoSrc} />} />
+  <Route path="/favourites" element={<FavouritesPage />} />
 </Routes>
 ```
 
-## 4. Add a navigation link
+## 4. Add navigation if needed
 
-If users need to reach the page from the menu, add a link in the navbar.
+If users need to reach the page directly, add a navbar link or a button that links to it.
+
+## 5. Dynamic routes for detail pages
+
+Detail pages often need a route parameter.
 
 ```tsx
-<NavLink to="/about">About</NavLink>
+<Route path="/pokemon/:name" element={<PokemonDetailPage />} />
 ```
 
-## 5. Check the URL
+Then read it with `useParams()`.
 
-Run the app and open `/about`. If the route is connected correctly, the new page should render without a full browser refresh.
+```tsx
+const { name } = useParams()
+```
+
+## Good next steps
+
+After the route works, you can:
+
+- fetch data for the page
+- show one selected item
+- add search or sorting
+- show a saved collection
 
 ## Common mistakes
 
 - Forgetting to export the page component.
 - Importing the file with the wrong path.
-- Adding the component but forgetting to add the route.
-- Using a `Link` or `NavLink` that points to the wrong URL.
-
-## Good next step
-
-Once the route works, add real content, fetch data, or break the page into smaller components if it starts getting too large.
+- Adding the component but not the route.
+- Using a link that points to the wrong URL.

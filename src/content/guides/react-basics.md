@@ -1,10 +1,16 @@
 # React basics
 
-React builds interfaces out of components. Each component returns JSX, which looks like HTML but runs inside JavaScript or TypeScript.
+React builds interfaces out of components. In this project, students mainly use React to:
+
+- create pages
+- render lists
+- respond to clicks and form input
+- store data in state
+- fetch API data
 
 ## Components
 
-A component is just a function.
+A component is a function that returns JSX.
 
 ```tsx
 function WelcomeMessage() {
@@ -12,50 +18,62 @@ function WelcomeMessage() {
 }
 ```
 
-Use components to break a page into smaller, named pieces.
-
 ## Props
 
 Props let a parent component pass data into a child component.
 
 ```tsx
-interface WelcomeMessageProps {
-  name: string
+interface ItemCardProps {
+  title: string
 }
 
-function WelcomeMessage({ name }: WelcomeMessageProps) {
-  return <h1>Hello {name}</h1>
+function ItemCard({ title }: ItemCardProps) {
+  return <h2>{title}</h2>
 }
 ```
 
 ## State
 
-State is data that can change while the user uses the page.
+State is data that can change while the user is using the page.
 
 ```tsx
-const [count, setCount] = useState(0)
+const [searchTerm, setSearchTerm] = useState('')
 ```
 
-When state changes, React renders the component again.
+Common state in this project includes:
+
+- search text
+- selected filters
+- fetched items
+- favourites
+- custom notes
+- custom created items
 
 ## Events
 
-You can update state in response to user actions.
+Update state in response to user actions.
 
 ```tsx
-<button onClick={() => setCount((current) => current + 1)}>
-  Increase
+<input
+  value={searchTerm}
+  onChange={(event) => setSearchTerm(event.target.value)}
+/>
+```
+
+```tsx
+<button onClick={() => setShowFavourites((current) => !current)}>
+  Toggle favourites
 </button>
 ```
 
 ## Rendering lists
 
-Use `map` to turn an array into UI.
+Use `map()` to turn an array into UI.
 
 ```tsx
 <ul>
-  {pokemon.map((item) => (
-    <li key={item.name}>{item.name}</li>
+  {items.map((item) => (
+    <li key={item.id}>{item.title}</li>
   ))}
 </ul>
 ```
@@ -64,22 +82,34 @@ Each item needs a stable `key`.
 
 ## Conditional rendering
 
-Show different UI depending on the current state.
+Show different UI depending on state.
 
 ```tsx
-{isLoading ? <p>Loading...</p> : <PokemonList items={pokemon} />}
+{isLoading ? <p>Loading...</p> : <ItemList items={items} />}
+```
+
+## Derived values
+
+Not everything needs its own state.
+
+If you already have `items`, `searchTerm`, and `selectedFilter`, you can often calculate the filtered list during rendering instead of storing another copy.
+
+```tsx
+const visibleItems = items.filter((item) =>
+  item.title.toLowerCase().includes(searchTerm.toLowerCase()),
+)
 ```
 
 ## Effects
 
-Use `useEffect` for work outside rendering, such as fetching data or talking to browser APIs.
+Use `useEffect` for work outside rendering, such as fetching data or saving to browser storage.
 
 ```tsx
 useEffect(() => {
-  document.title = 'Pokemon page'
-}, [])
+  window.localStorage.setItem('saved-search', searchTerm)
+}, [searchTerm])
 ```
 
 ## Rule of thumb
 
-If you can calculate something directly from props or state, do that during rendering. Reach for `useEffect` only when you are synchronising with something outside React.
+If you can calculate something from existing props or state, calculate it directly. Use `useEffect` only when you are synchronising with something outside React.

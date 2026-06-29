@@ -1,6 +1,10 @@
 # Fetching API data
 
-A common React pattern is to store loading, error, and data states separately so the UI can describe what is happening.
+Fetching data is one of the main Session 2+ tasks. In this project, a good first version should handle:
+
+- loading
+- error
+- successful data
 
 ## Example with `fetch`
 
@@ -69,19 +73,34 @@ export function PokemonPage() {
 }
 ```
 
-## Why use an abort controller?
+## Why use `useEffect`
 
-If the user leaves the page before the request finishes, the cleanup function cancels the request and avoids updating state after unmount.
+The request should run after the component renders, not during rendering.
+
+## Why use an abort controller
+
+If the user leaves the page before the request finishes, the cleanup function cancels the request and avoids updating state after the component unmounts.
 
 ## Good habits
 
-- Check `response.ok` before trusting the response.
-- Handle empty, loading, and error states.
-- Keep the first version simple before adding search or pagination.
-- Fetch inside `useEffect` when the data is needed after the component renders.
+- Check `response.ok`.
+- Handle loading, empty, and error states.
+- Start simple before adding search, filters, or sorting.
+- Keep the response shape small and understandable.
+
+## For detail pages
+
+Detail pages usually fetch one item based on the route.
+
+```tsx
+const { id } = useParams()
+```
+
+Then build the request using that id or slug.
 
 ## Common mistakes
 
-- Fetching directly in the component body, which causes repeated requests.
-- Assuming the API response shape without checking it.
-- Forgetting to handle failed requests.
+- Fetching in the component body.
+- Assuming the response shape without checking it.
+- Forgetting to handle failures.
+- Trying to build search, filtering, and favourites before the basic fetch works.

@@ -1,0 +1,2 @@
+- Change list page acceptance criteria to include a picture
+- 

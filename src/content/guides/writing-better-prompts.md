@@ -1,62 +1,74 @@
 # Writing better prompts
 
-If you use AI tools while building your project, weak prompts usually lead to vague answers. Strong prompts create a clearer task with clearer boundaries.
+Session 1 is intended to be manual. From Session 2 onwards, AI can help with more advanced tasks.
 
-## Include the goal
+When students use AI, weak prompts usually produce vague answers. Strong prompts produce clearer help with less rewriting.
 
-Start with what you want the tool to do.
+## Start with the goal
 
-- Build a React component.
-- Explain an error message.
-- Refactor a function.
-- Suggest accessibility improvements.
+Say exactly what you want.
 
-## Add context
+- build a list page
+- debug a broken route
+- add search to a React page
+- explain why a fetch request is failing
 
-The tool is more useful when it knows what you are working with.
+## Add project context
 
-- Which framework you are using.
-- Which file or component is involved.
-- What you already tried.
-- What is currently going wrong.
+The tool is more useful when it knows:
+
+- this project uses React and TypeScript
+- styling should use Tailwind classes only
+- the file or component you are changing
+- what already works
+- what is currently failing
 
 ## Add constraints
 
-Good constraints reduce irrelevant answers.
+Constraints reduce irrelevant answers.
 
-- Use TypeScript.
-- Keep the code beginner friendly.
-- Do not add extra dependencies.
-- Use Tailwind classes only.
+- keep it beginner friendly
+- do not add extra libraries
+- use local storage for saved data
+- explain the change before rewriting the file
 
 ## Ask for a specific output
 
-Instead of asking for help in general, ask for the exact form you need.
+Bad prompt:
 
 ```md
-Help me debug why this React component keeps fetching in a loop.
-Explain the cause first, then show a fixed version.
-Do not add any libraries.
+Help with my app.
 ```
 
-## Give examples when useful
+Better prompt:
 
-If you want a certain tone, structure, or style, show one short example.
+```md
+Help me add search to my React list page.
+Use TypeScript and Tailwind only.
+Do not add any libraries.
+Explain the state I need first, then show the updated component.
+```
 
-## Improve the conversation
+## Ask smaller questions when needed
 
-If the first answer is close but not good enough, refine it.
+If a task is large, split it.
 
-- Ask it to simplify the explanation.
-- Ask it to keep your existing structure.
-- Ask it to explain the tradeoffs.
-- Ask it to change only one file.
+- first ask how the state should work
+- then ask for the UI controls
+- then ask how to connect filtering or sorting
 
-## Prompt checklist
+## Check the answer critically
+
+Students should still read the answer and ask:
+
+- does this match the task?
+- does it use patterns already in the project?
+- is it simple enough to understand?
+- did it add unnecessary code?
+
+## Good prompt checklist
 
 - Is the goal clear?
-- Is the context concrete?
-- Are the constraints stated?
-- Did you ask for the output format you want?
-
-Better prompts are usually shorter than people expect, but they are more specific.
+- Is the file or component named?
+- Are the project rules included?
+- Did you say what kind of answer you want?

@@ -5,14 +5,6 @@ import { findGuide, GUIDES } from '../data/guides'
 export function GuidesPage() {
   const { slug } = useParams()
   const selectedGuide = findGuide(slug)
-  const selectedGuideIndex = selectedGuide
-    ? GUIDES.findIndex((guide) => guide.slug === selectedGuide.slug)
-    : -1
-  const previousGuide = selectedGuideIndex > 0 ? GUIDES[selectedGuideIndex - 1] : null
-  const nextGuide =
-    selectedGuideIndex >= 0 && selectedGuideIndex < GUIDES.length - 1
-      ? GUIDES[selectedGuideIndex + 1]
-      : null
 
   if (!selectedGuide) {
     return (
@@ -48,7 +40,7 @@ export function GuidesPage() {
           </div>
 
           <nav className="grid gap-2" aria-label="Guides navigation">
-            {GUIDES.map((guide, index) => {
+            {GUIDES.map((guide) => {
               const isActive = guide.slug === selectedGuide.slug
 
               return (
@@ -62,16 +54,10 @@ export function GuidesPage() {
                   to={`/guides/${guide.slug}`}
                 >
                   <div className="flex items-center justify-between gap-3">
-                    <span className="text-xs font-semibold uppercase tracking-[0.2em] text-slate-500">
-                      Guide {index + 1}
-                    </span>
+                    <h3 className="text-base font-semibold text-slate-900">{guide.title}</h3>
                     <span className="rounded-full bg-slate-100 px-2.5 py-1 text-xs font-medium text-slate-600">
                       {guide.category}
                     </span>
-                  </div>
-                  <div className="grid gap-1">
-                    <h3 className="text-base font-semibold text-slate-900">{guide.title}</h3>
-                    <p className="text-sm leading-6 text-slate-600">{guide.description}</p>
                   </div>
                 </Link>
               )
@@ -96,35 +82,6 @@ export function GuidesPage() {
           </header>
 
           <MarkdownRenderer content={selectedGuide.content} />
-
-          <footer className="grid gap-3 border-t border-slate-200 pt-6 sm:grid-cols-2">
-            <div>
-              {previousGuide ? (
-                <Link
-                  className="grid gap-1 rounded-2xl border border-slate-200 px-4 py-4 hover:border-blue-200 hover:bg-slate-50"
-                  to={`/guides/${previousGuide.slug}`}
-                >
-                  <span className="text-xs font-semibold uppercase tracking-[0.2em] text-slate-500">
-                    Previous
-                  </span>
-                  <span className="font-semibold text-slate-900">{previousGuide.title}</span>
-                </Link>
-              ) : null}
-            </div>
-            <div>
-              {nextGuide ? (
-                <Link
-                  className="grid gap-1 rounded-2xl border border-slate-200 px-4 py-4 text-left hover:border-blue-200 hover:bg-slate-50"
-                  to={`/guides/${nextGuide.slug}`}
-                >
-                  <span className="text-xs font-semibold uppercase tracking-[0.2em] text-slate-500">
-                    Next
-                  </span>
-                  <span className="font-semibold text-slate-900">{nextGuide.title}</span>
-                </Link>
-              ) : null}
-            </div>
-          </footer>
         </article>
       </div>
     </section>

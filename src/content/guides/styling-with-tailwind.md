@@ -1,18 +1,77 @@
 # Styling with Tailwind
 
-Tailwind lets you style directly in `className`, which keeps the structure and styling close together.
+Tailwind keeps structure and styling close together in `className`, which matches the rules for this project.
+
+## Project rule
+
+Use Tailwind utility classes for application styling.
+Do not add feature styling in CSS files.
 
 ## Start with layout first
 
-Before choosing colours, make the layout work.
+Before choosing colours, make sure the layout works.
 
-- Use `flex`, `grid`, `gap-*`, `p-*`, and `max-w-*` to control spacing and structure.
-- Use `items-*` and `justify-*` to align content.
-- Use `min-h-screen` or `w-full` when the layout needs to fill available space.
+- use `flex`, `grid`, `gap-*`, `p-*`, and `max-w-*`
+- use `items-*` and `justify-*` for alignment
+- use responsive prefixes like `md:` when the layout changes at larger sizes
 
-## Build from small decisions
+## Common utility groups
 
-A card often starts with a few core classes.
+These are some of the most useful Tailwind classes for this project.
+
+Font size:
+
+- `text-sm` for smaller text
+- `text-base` for normal body text
+- `text-xl` or `text-2xl` for headings
+
+Margin:
+
+- `mt-4` adds margin at the top
+- `mb-4` adds margin at the bottom
+- `mx-auto` can centre a block horizontally
+
+Padding:
+
+- `p-4` adds padding on all sides
+- `px-4` adds left and right padding
+- `py-2` adds top and bottom padding
+
+Width:
+
+- `w-full` makes an element take the full available width
+- `max-w-4xl` limits how wide a section can grow
+
+Height:
+
+- `h-10` gives a fixed height
+- `min-h-screen` can make a section fill the screen height
+
+Background colour:
+
+- `bg-white`
+- `bg-slate-100`
+- `bg-blue-600`
+
+Text colour:
+
+- `text-slate-900`
+- `text-slate-700`
+- `text-white`
+
+Border:
+
+- `border` adds a border
+- `border-slate-200` changes the border colour
+- `border-2` makes the border thicker
+
+Border radius:
+
+- `rounded-md`
+- `rounded-xl`
+- `rounded-2xl`
+
+## Example card
 
 ```tsx
 <section className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm">
@@ -21,9 +80,9 @@ A card often starts with a few core classes.
 </section>
 ```
 
-## Use responsive prefixes
+## Useful patterns for this project
 
-Tailwind makes it easy to adjust the layout at different screen sizes.
+List and grid layouts:
 
 ```tsx
 <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
@@ -33,30 +92,42 @@ Tailwind makes it easy to adjust the layout at different screen sizes.
 </div>
 ```
 
-- No prefix means all screen sizes.
-- `md:*` applies from the medium breakpoint upwards.
-- `xl:*` applies from the extra large breakpoint upwards.
+Search or filter controls:
 
-## Reuse patterns carefully
+```tsx
+<div className="grid gap-3 md:grid-cols-[minmax(0,1fr)_220px]">
+  <input className="rounded-xl border border-slate-200 px-3 py-2" />
+  <select className="rounded-xl border border-slate-200 px-3 py-2" />
+</div>
+```
 
-If several elements use the same long class list, extract a small variable.
+Button example using several common utility groups:
+
+```tsx
+<button className="rounded-xl border border-blue-700 bg-blue-600 px-4 py-2 text-base text-white hover:bg-blue-700">
+  Open list page
+</button>
+```
+
+## Reuse repeated class lists carefully
+
+If one class list appears several times, store it in a small variable.
 
 ```tsx
 const buttonClass =
   'inline-flex rounded-xl bg-blue-600 px-4 py-2 font-medium text-white hover:bg-blue-700'
 ```
 
-This keeps repeated styling readable without moving feature styles into separate CSS files.
-
 ## Good habits
 
-- Keep colours and spacing consistent.
-- Make interactive elements look interactive.
-- Check the page on mobile width, not just desktop.
-- Prefer simple utility combinations over complicated one-off styling.
+- Keep spacing consistent.
+- Make buttons and links look interactive.
+- Check mobile width, not just desktop.
+- Keep the number of colours under control.
 
 ## Common mistakes
 
-- Adding too many classes before the layout is clear.
-- Mixing several colour styles with no visual system.
-- Forgetting hover, focus, or disabled states on buttons and links.
+- Adding lots of classes before the layout is clear.
+- Mixing too many unrelated colours.
+- Forgetting hover, focus, or disabled states.
+- Moving feature styling into CSS instead of keeping it in Tailwind classes.

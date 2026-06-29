@@ -1,14 +1,27 @@
 # Adding a button
 
-Buttons are a good beginner task because they combine JSX structure, readable text, and Tailwind styling in one small change.
+Buttons are a good Session 1 task because they are small, visible, and useful in almost every feature.
 
-## 1. Choose where the button should live
+## When to use a button
 
-Buttons usually sit inside a page section, hero area, or card. Start by finding the component where the button belongs.
+Use a `<button>` when something happens on the current page, for example:
 
-## 2. Add the button element
+- open a panel
+- load more items
+- save a favourite
+- add something to a team or watchlist
 
-Create a basic button with a clear label.
+Use a link when the user should move to another page.
+
+## 1. Pick the right component
+
+Open the page or card component where the action belongs.
+
+In this project, that is often a page in `src/pages` or a repeated card inside a list.
+
+## 2. Add a clear button
+
+Start with a simple button and a label that explains the action.
 
 ```tsx
 <button
@@ -19,24 +32,42 @@ Create a basic button with a clear label.
 </button>
 ```
 
-## 3. Make the label specific
+## 3. Make the text specific
 
-Avoid vague labels like `Click here`. The button text should describe the action:
+Avoid labels like `Click here` or `Submit` when they do not explain enough.
 
-- `Open profile`
-- `Load films`
-- `View team`
+Better examples:
 
-## 4. Add interactive styling
+- `Save to favourites`
+- `Add to team`
+- `Open details`
+- `Create custom film`
 
-At minimum, include hover styling so the button feels interactive. If you want to go one step further, add focus styles as well.
+## 4. Add hover and focus states
+
+Interactive elements should look interactive.
 
 ```tsx
 className="inline-flex rounded-xl bg-blue-600 px-4 py-2 font-medium text-white hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-300"
 ```
 
+## 5. Connect the button to state
+
+Most buttons in this app will trigger a state update.
+
+```tsx
+<button
+  type="button"
+  onClick={() => setShowFavourites((current) => !current)}
+  className="inline-flex rounded-xl bg-blue-600 px-4 py-2 font-medium text-white hover:bg-blue-700"
+>
+  Toggle favourites
+</button>
+```
+
 ## Common mistakes
 
-- Adding a button with no clear purpose.
+- Using a button when the action should actually be a page link.
+- Writing button text that does not explain the action.
 - Forgetting hover or focus styles.
-- Using an `<a>` tag when the element is meant to act like a button on the page.
+- Adding a button with no `onClick` and no real purpose.

@@ -2,17 +2,23 @@
   "name": "DB Work Experience",
   "image": "mcr.microsoft.com/devcontainers/typescript-node:1-22-bookworm",
   "remoteUser": "node",
-  "forwardPorts": [5173],
+  "forwardPorts": [1455, 5173],
   "portsAttributes": {
+    "1455": {
+      "label": "Codex Auth Callback",
+      "onAutoForward": "silent"
+    },
     "5173": {
       "label": "Vite Dev Server",
       "onAutoForward": "openPreview"
     }
   },
-  "postCreateCommand": "corepack enable && pnpm install",
+  "postCreateCommand": "bash .devcontainer/post-create.sh",
+  "postStartCommand": "bash .devcontainer/post-start.sh",
   "customizations": {
     "vscode": {
       "extensions": [
+        "openai.chatgpt",
         "dbaeumer.vscode-eslint",
         "bradlc.vscode-tailwindcss",
         "esbenp.prettier-vscode"

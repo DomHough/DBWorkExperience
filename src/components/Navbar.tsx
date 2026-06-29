@@ -76,6 +76,14 @@ export function Navbar({ selectedApi }: NavbarProps) {
             Guides
           </NavLink>
           <NavLink
+            to="/imdb"
+            className={({ isActive }) =>
+              isActive ? `${navBaseClass} bg-blue-100 text-blue-700` : navBaseClass
+            }
+          >
+            IMDb
+          </NavLink>
+          <NavLink
             to="/settings"
             className={({ isActive }) =>
               isActive ? `${navBaseClass} bg-blue-100 text-blue-700` : navBaseClass
