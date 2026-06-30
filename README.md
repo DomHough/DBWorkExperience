@@ -95,4 +95,5 @@ Key areas in the project:
 
 - Styling should stay in Tailwind utility classes.
 - CSS files should only be used for Tailwind imports and entry styles.
+- Tailwind class reference: https://tailwind.build/classes
 - The app is meant to be extended, not treated as a finished product.

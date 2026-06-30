@@ -1,53 +1,40 @@
 # DB Work Experience Session 1 Cheatsheet
 
-## Codespaces: Codex sign-in workaround
+## Setup Commands
 
-If Codex sign-in fails in browser-based Codespaces or `github.dev`, it may be because the login flow redirects to `http://localhost:1455`, which does not complete properly in that environment.
+Enable pnpm if needed:
 
-This repo's devcontainer now forwards port `1455` for the Codex callback and prints the forwarded callback URL when the Codespace starts.
-
-Use this flow:
-
-1. Start or rebuild the Codespace.
-2. Open the terminal output and look for:
-
-```text
-https://<codespace-name>-1455.<port-forwarding-domain>/auth/callback
+```sh
+corepack enable
 ```
 
-3. Try signing in to Codex.
-4. If the browser lands on `http://localhost:1455/auth/callback?...` and stalls, copy that full URL.
-5. Replace `http://localhost:1455` with the forwarded host from step 2, then open the edited URL in the browser.
+Install the project:
 
-Example:
-
-```text
-http://localhost:1455/auth/callback?code=abc...
+```sh
+pnpm install
 ```
 
-becomes:
-
-```text
-https://<codespace-name>-1455.<port-forwarding-domain>/auth/callback?code=abc...
-```
-
-If device code login is available in your Codex setup, that is another good option:
+Sign in to Codex:
 
 ```sh
 codex login --device-auth
 ```
 
-This devcontainer also starts the app automatically with:
+Start the app:
 
 ```sh
-pnpm run dev -- --host 0.0.0.0
+pnpm dev
 ```
 
-The Vite log is written to:
+Open the app in your browser using the local URL shown in the terminal. It will usually be:
 
 ```text
-/tmp/db-work-experience-vite.log
+http://localhost:5173
 ```
+
+## Session 1 Tasks
+
+Session 1 is for small, beginner-friendly changes. Focus on getting something visible working without building the full API feature yet.
 
 ## Task 1: Change the background colour
 
@@ -72,7 +59,6 @@ Create a new page file in `src/pages/`.
 Examples:
 
 - `PokemonPage.tsx`
-- `StarWarsPage.tsx`
 - `FilmsPage.tsx`
 
 Starter example:
@@ -98,17 +84,18 @@ import { PokemonPage } from './pages/PokemonPage'
 <Route path="/pokemon" element={<PokemonPage />} />
 ```
 
-Track ideas:
+You can use the same pattern for a films page:
 
-- Pokemon API: `/pokemon`
-- Star Wars API: `/star-wars`
-- Films API: `/films`
+- page: `FilmsPage.tsx`
+- route: `/films`
+
+The page only needs a heading and a short paragraph for Session 1.
 
 ## Task 3: Add a navbar link to the list page
 
 Open `src/components/Navbar.tsx`.
 
-You can add another `NavLink` like the others:
+Add another `NavLink` like the others:
 
 ```tsx
 <NavLink
@@ -121,11 +108,13 @@ You can add another `NavLink` like the others:
 </NavLink>
 ```
 
+For a films page, change the path and text to match your route.
+
 ## Task 4: Update the home page text
 
 The home page is inside `src/App.tsx` in the `HomePage` function.
 
-You can change the text:
+You can change text such as:
 
 ```tsx
 <span className="text-xl font-semibold uppercase tracking-[0.24em] text-slate-900">
@@ -135,11 +124,26 @@ You can change the text:
 
 Example changes:
 
-- `Dom's Pokemon Project`
-- `Star Wars Explorer`
+- `My Pokemon Project`
 - `My Film Finder`
 
-## Task 5: Add a button on the home page
+## Task 5: Change the browser tab title
+
+Open `index.html`.
+
+Look for the `<title>` tag:
+
+```html
+<title>DB Work Experience Starter</title>
+```
+
+Change it to something that matches your project, for example:
+
+```html
+<title>My Pokemon Project</title>
+```
+
+## Task 6: Add a button on the home page
 
 Still in `src/App.tsx`, add a link or button on the home page that sends the user to your list page.
 
@@ -162,23 +166,4 @@ Then add something like this inside `HomePage`:
 </Link>
 ```
 
-## Common fixes
-
-If the page does not open:
-
-- check the import in `src/App.tsx`
-- check the route path matches the link path
-- check the component name matches the file export
-
-If the app shows an error:
-
-- look closely at the terminal
-- look for missing imports
-- look for missing closing tags like `</section>`
-- check capital letters in component names
-
-If styling does not change:
-
-- make sure you edited `className`
-- use Tailwind utility classes
-- do not put feature styling in a separate CSS file
+For a films page, update the path and button text to match your route.

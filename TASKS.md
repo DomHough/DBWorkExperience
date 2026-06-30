@@ -44,11 +44,8 @@ From Session 2 onwards, AI support can be used. These tasks move students toward
 
 ### Fetch a list of items
 
-Call the API and store the returned data in component state.
-
-### Show a list of items
-
-Render the fetched results on the page so users can browse them.
+Call the API, store the returned data in component state, and render the results on the page so users can browse them.
+Each list item should show useful information, include a picture where available, and support moving through the results clearly if there are lots of items.
 
 ### Add a detail page
 
@@ -81,10 +78,6 @@ Let users clear their search and filter choices in one click and return to the f
 ### Show a message when an item cannot be found
 
 If a user opens a detail page for an item that does not exist, show a helpful message instead of a broken page.
-
-### Let users move between different pages of results
-
-If there are lots of items, show only some of them at a time and let the user move to the next or previous page.
 
 ### Add a list view and a grid view
 
@@ -131,7 +124,6 @@ Students may also extend this with:
 - back navigation from detail pages
 - reset controls for search and filters
 - helpful not found messages
-- moving between different pages of results
 - list and grid view options
 - favourites
 - custom created items
