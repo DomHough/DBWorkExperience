@@ -1,9 +1,8 @@
-import { useEffect, useMemo } from 'react'
+import { useEffect } from 'react'
 import { Link, NavLink } from 'react-router-dom'
 import type { ApiKey } from '../data/tasks'
 import defaultLogo from '../assets/db.svg'
 import pokeLogo from '../assets/db_pokeball.svg'
-import starWarsLogo from '../assets/db_starwars.svg'
 
 interface NavbarProps {
   selectedApi: ApiKey | null
@@ -11,19 +10,9 @@ interface NavbarProps {
 
 export function Navbar({ selectedApi }: NavbarProps) {
   const navBaseClass =
-    'rounded-xl px-3 py-2 text-sm text-slate-700 hover:bg-slate-100'
+    'rounded-xl px-3 py-2 text-sm text-slate-700 transition hover:bg-slate-100'
 
-  const logoSrc = useMemo(() => {
-    if (selectedApi === 'pokeapi') {
-      return pokeLogo
-    }
-
-    if (selectedApi === 'swapi') {
-      return starWarsLogo
-    }
-
-    return defaultLogo
-  }, [selectedApi])
+  const logoSrc = selectedApi === 'pokeapi' ? pokeLogo : defaultLogo
 
   useEffect(() => {
     let iconLink = document.querySelector<HTMLLinkElement>('link[rel="icon"]')
@@ -39,10 +28,10 @@ export function Navbar({ selectedApi }: NavbarProps) {
   }, [logoSrc])
 
   return (
-    <header className="sticky top-0 z-10 bg-white px-6 py-4 shadow-sm shadow-slate-900/10">
-      <div className="mx-auto flex w-full max-w-6xl flex-wrap items-center justify-between gap-4">
+    <header className="sticky top-0 z-10 border-b border-white/70 bg-white/85 px-6 py-4 shadow-sm shadow-slate-900/5 backdrop-blur-md">
+      <div className="mx-auto flex w-full max-w-7xl flex-wrap items-center justify-between gap-4">
         <Link
-          className="inline-flex items-center gap-2 text-base font-bold text-slate-900"
+          className="inline-flex items-center gap-3 text-base font-bold text-slate-900"
           to="/"
         >
           <img className="h-8 w-8 shrink-0" src={logoSrc} alt="DB Work Experience logo" />
@@ -74,14 +63,6 @@ export function Navbar({ selectedApi }: NavbarProps) {
             }
           >
             Guides
-          </NavLink>
-          <NavLink
-            to="/imdb"
-            className={({ isActive }) =>
-              isActive ? `${navBaseClass} bg-blue-100 text-blue-700` : navBaseClass
-            }
-          >
-            IMDb
           </NavLink>
           <NavLink
             to="/settings"

@@ -1,4 +1,4 @@
-export type ApiKey = 'pokeapi' | 'swapi' | 'imdb'
+export type ApiKey = 'pokeapi'
 export type TaskStatus = 'todo' | 'in-progress' | 'done'
 export type UnlockRule = 'all' | 'any'
 export type PriorityTag = 'low' | 'medium' | 'high'
@@ -36,8 +36,6 @@ export const TASK_BOARD_STORAGE_KEY = 'db-work-experience-task-board-v1'
 
 export const API_OPTIONS: Array<{ key: ApiKey; label: string }> = [
   { key: 'pokeapi', label: 'PokeAPI' },
-  { key: 'swapi', label: 'Star Wars API' },
-  { key: 'imdb', label: 'IMDb API' },
 ]
 
 export const KANBAN_COLUMNS: Array<{ key: TaskStatus; label: string }> = [
@@ -62,20 +60,6 @@ const API_TRACKS: ApiTrackCopy[] = [
     plural: 'Pokemon',
     sourceName: 'PokeAPI',
   },
-  {
-    api: 'swapi',
-    prefix: 'swapi',
-    singular: 'Star Wars character or film',
-    plural: 'Star Wars items',
-    sourceName: 'Star Wars API',
-  },
-  {
-    api: 'imdb',
-    prefix: 'imdb',
-    singular: 'film',
-    plural: 'films',
-    sourceName: 'IMDb API',
-  },
 ]
 
 function buildTaskDefinitions(track: ApiTrackCopy): TaskDefinition[] {
@@ -93,7 +77,6 @@ function buildTaskDefinitions(track: ApiTrackCopy): TaskDefinition[] {
   const backButtonId = `${track.prefix}-back-button`
   const resetControlsId = `${track.prefix}-reset-controls`
   const notFoundId = `${track.prefix}-not-found`
-  const pagingId = `${track.prefix}-paging`
   const viewToggleId = `${track.prefix}-view-toggle`
   const favouritesId = `${track.prefix}-favourites`
   const customItemId = `${track.prefix}-custom-item`
@@ -205,11 +188,13 @@ function buildTaskDefinitions(track: ApiTrackCopy): TaskDefinition[] {
       id: fetchListId,
       api: track.api,
       title: `Fetch and show a list of ${track.plural}`,
-      description: `Load data from the ${track.sourceName}, store it in component state, and render the results on the list page.`,
+      description: `Load data from the ${track.sourceName}, store it in component state, render the results on the list page, and let users move through the results clearly if there are lots of items.`,
       acceptanceCriteria: [
         `The page makes a request to the ${track.sourceName}`,
         `The page shows a visible list or grid of ${track.plural}`,
         `Each item displays at least one useful piece of information about the ${track.singular}`,
+        'Each item includes a picture or image where the chosen API provides one',
+        'If there are lots of results, the page includes clear controls to move between result pages or batches',
         'The page clearly shows when the data has loaded successfully',
       ],
       guideSlugs: ['fetching-api-data', 'react-basics', 'styling-with-tailwind'],
@@ -336,24 +321,6 @@ function buildTaskDefinitions(track: ApiTrackCopy): TaskDefinition[] {
       dependencies: [detailRouteId],
     },
     {
-      id: pagingId,
-      api: track.api,
-      title: `Let users move between different pages of ${track.plural}`,
-      description:
-        'If there are lots of items, show only some of them at a time and let the user move to the next or previous page.',
-      acceptanceCriteria: [
-        'The list page does not show every item at once',
-        'Controls are visible to move forward and backward through the results',
-        'The user can tell which page of results they are viewing',
-        'Search and filters still work when moving between pages',
-      ],
-      guideSlugs: ['working-with-lists-and-sorting', 'search-and-filtering', 'react-basics'],
-      priority: 'medium',
-      difficulty: 'intermediate',
-      session: 'session-2-plus',
-      dependencies: [fetchListId],
-    },
-    {
       id: viewToggleId,
       api: track.api,
       title: 'Add a list view and a grid view',
@@ -406,7 +373,7 @@ function buildTaskDefinitions(track: ApiTrackCopy): TaskDefinition[] {
     {
       id: collectionId,
       api: track.api,
-      title: `Create a ${track.api === 'pokeapi' ? 'team' : track.api === 'imdb' ? 'watchlist' : 'collection'}`,
+      title: `Create a ${track.api === 'pokeapi' ? 'team' : 'collection'}`,
       description: `Let users build their own group of ${track.plural}, such as a team, watchlist, squad, or crew.`,
       acceptanceCriteria: [
         `Users can add ${track.plural} to a custom collection`,
@@ -458,8 +425,6 @@ export const TASKS: TaskDefinition[] = API_TRACKS.flatMap(buildTaskDefinitions)
 
 export const TASKS_BY_API: Record<ApiKey, TaskDefinition[]> = {
   pokeapi: TASKS.filter((task) => task.api === 'pokeapi'),
-  swapi: TASKS.filter((task) => task.api === 'swapi'),
-  imdb: TASKS.filter((task) => task.api === 'imdb'),
 }
 
 export function createDefaultTaskBoardState(): PersistedTaskState {
@@ -536,19 +501,12 @@ export function loadTaskBoardState(): PersistedTaskState {
         ? (parsed.progress as Record<string, unknown>)
         : {}
 
-    const selected =
-      parsed.selectedApi === 'pokeapi' ||
-      parsed.selectedApi === 'swapi' ||
-      parsed.selectedApi === 'imdb'
-        ? parsed.selectedApi
-        : null
+    const selected = parsed.selectedApi === 'pokeapi' ? parsed.selectedApi : null
 
     return {
       selectedApi: selected,
       progress: {
         pokeapi: normaliseTaskProgress('pokeapi', progress.pokeapi),
-        swapi: normaliseTaskProgress('swapi', progress.swapi),
-        imdb: normaliseTaskProgress('imdb', progress.imdb),
       },
     }
   } catch {

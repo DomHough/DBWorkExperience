@@ -3,11 +3,9 @@ import { Navigate, Route, Routes, useLocation } from 'react-router-dom'
 import { Navbar } from './components/Navbar'
 import defaultLogo from './assets/db.svg'
 import pokeLogo from './assets/db_pokeball.svg'
-import starWarsLogo from './assets/db_starwars.svg'
 import type { ApiKey } from './data/tasks'
 import { loadTaskBoardState, TASK_BOARD_STORAGE_KEY } from './data/tasks'
 import { GuidesPage } from './pages/GuidesPage'
-import { ImdbPage } from './pages/ImdbPage'
 import { SettingsPage } from './pages/SettingsPage'
 import { TasksPage } from './pages/TasksPage'
 
@@ -18,10 +16,6 @@ function readSelectedApiFromStorage(): ApiKey | null {
 function getLogoSrc(selectedApi: ApiKey | null) {
   if (selectedApi === 'pokeapi') {
     return pokeLogo
-  }
-
-  if (selectedApi === 'swapi') {
-    return starWarsLogo
   }
 
   return defaultLogo
@@ -71,7 +65,7 @@ function App() {
     window.addEventListener('storage', handleStorageUpdate)
     return () => window.removeEventListener('storage', handleStorageUpdate)
   }, [])
-  b
+
   return (
     <div className="flex min-h-screen flex-col bg-slate-100 text-slate-900">
       <Navbar selectedApi={selectedApi} />
@@ -99,7 +93,6 @@ function App() {
           />
           <Route path="/guides" element={<GuidesPage />} />
           <Route path="/guides/:slug" element={<GuidesPage />} />
-          <Route path="/imdb" element={<ImdbPage />} />
           <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>
       </main>

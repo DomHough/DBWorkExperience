@@ -27,8 +27,6 @@ interface ApiAvailability {
 
 const API_HEALTH_ENDPOINTS: Record<ApiKey, string> = {
   pokeapi: 'https://pokeapi.co/api/v2/pokemon?limit=1',
-  swapi: 'https://swapi.py4e.com/api/people/1/',
-  imdb: 'https://api.imdbapi.dev/titles?types=MOVIE&limit=1',
 }
 
 const API_HEALTH_TIMEOUT_MS = 8000
@@ -67,15 +65,8 @@ function sessionLabel(session: SessionTag): string {
 }
 
 function apiOptionDescription(api: ApiKey): string {
-  if (api === 'pokeapi') {
-    return 'Build a Pokemon list page, detail page, search, and filtering in guided steps.'
-  }
-
-  if (api === 'swapi') {
-    return 'Build a Star Wars list page, detail page, search, and filtering in guided steps.'
-  }
-
-  return 'Build a film list page, detail page, search, and filtering with the IMDb API.'
+  void api
+  return 'Build a Pokemon list page, detail page, search, and filtering in guided steps.'
 }
 
 function columnDescription(status: TaskStatus): string {
@@ -147,8 +138,6 @@ function availabilityLabel(status: ApiAvailabilityStatus): string {
 function createInitialAvailabilityState(): Record<ApiKey, ApiAvailability> {
   return {
     pokeapi: { status: 'checking', message: 'Checking API availability...' },
-    swapi: { status: 'checking', message: 'Checking API availability...' },
-    imdb: { status: 'checking', message: 'Checking API availability...' },
   }
 }
 
