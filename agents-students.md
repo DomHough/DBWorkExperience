@@ -2,13 +2,25 @@
 
 This file is for students using Codex in this project.
 
-Its purpose is to keep Codex focused on student feature work and stop it from changing the course scaffolding.
+Its purpose is to keep Codex focused on the student's requested feature work and stop it from changing the course scaffolding.
 
-## Purpose
+## Project Context
 
-Codex should help students build their own API feature work.
+This project is a small starter app built with:
 
-Codex must not rewrite, expand, or complete the teaching structure of the app for them.
+- React
+- TypeScript
+- Vite
+- Tailwind CSS
+- pnpm
+
+Codex should keep new work consistent with that setup.
+
+Styling expectations:
+
+- use Tailwind utility classes for application styling
+- do not add feature styling in separate `.css` files
+- keep CSS files for Tailwind imports and entry styles only
 
 ## Model And Reasoning Rules
 
@@ -92,6 +104,7 @@ Unless the student asks otherwise, Codex should limit implementation work to stu
 
 - `src/pages/`
 - `src/components/`
+- `src/hooks/`
 - `src/App.tsx`
 - other feature files directly related to the requested change
 
