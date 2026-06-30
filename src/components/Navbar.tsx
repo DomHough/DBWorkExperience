@@ -57,6 +57,14 @@ export function Navbar({ selectedApi }: NavbarProps) {
             Tasks
           </NavLink>
           <NavLink
+            to="/pokemon"
+            className={({ isActive }) =>
+              isActive ? `${navBaseClass} bg-blue-100 text-blue-700` : navBaseClass
+            }
+          >
+            Pokemon
+          </NavLink>
+          <NavLink
             to="/guides"
             className={({ isActive }) =>
               isActive ? `${navBaseClass} bg-blue-100 text-blue-700` : navBaseClass

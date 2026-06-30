@@ -1,11 +1,14 @@
 import { useEffect, useMemo, useState } from 'react'
-import { Navigate, Route, Routes, useLocation } from 'react-router-dom'
+import { Link, Navigate, Route, Routes, useLocation } from 'react-router-dom'
 import { Navbar } from './components/Navbar'
 import defaultLogo from './assets/db.svg'
 import pokeLogo from './assets/db_pokeball.svg'
 import type { ApiKey } from './data/tasks'
 import { loadTaskBoardState, TASK_BOARD_STORAGE_KEY } from './data/tasks'
+import { useDocumentTitle } from './hooks/useDocumentTitle'
 import { GuidesPage } from './pages/GuidesPage'
+import { PokemonDetailPage } from './pages/PokemonDetailPage'
+import { PokemonPage } from './pages/PokemonPage'
 import { SettingsPage } from './pages/SettingsPage'
 import { TasksPage } from './pages/TasksPage'
 
@@ -22,20 +25,48 @@ function getLogoSrc(selectedApi: ApiKey | null) {
 }
 
 function HomePage({ logoSrc }: { logoSrc: string }) {
+  useDocumentTitle('Pokemon Work Experience')
+
   return (
     <section className="flex flex-1 items-center justify-center px-6 py-8">
-      <div className="relative flex w-full max-w-5xl items-center justify-center">
-        <img
-          className="h-auto max-h-[65vh] w-full max-w-[44rem] object-contain"
-          src={logoSrc}
-          alt="DB Work Experience logo"
-        />
-        <div className="absolute inset-0 flex items-center justify-center p-6">
-          <div className="rounded-2xl border border-white/40 bg-white/35 px-5 py-3 text-center shadow-lg shadow-slate-900/15 backdrop-blur-md">
-            <span className="text-xl font-semibold uppercase tracking-[0.24em] text-slate-900 sm:text-2xl">
-              DB Work Experience
-            </span>
+      <div className="grid w-full max-w-6xl gap-8 lg:grid-cols-[1.1fr_0.9fr] lg:items-center">
+        <div className="space-y-6">
+          <div className="space-y-3">
+            <p className="text-sm font-semibold uppercase tracking-[0.24em] text-amber-700">
+              Pokemon API Starter
+            </p>
+            <h1 className="text-4xl font-bold tracking-tight text-slate-900 sm:text-5xl">
+              Build a simple Pokemon feature in small steps
+            </h1>
+            <p className="max-w-2xl text-base leading-7 text-slate-700">
+              Start with a page and a route, then fetch real Pokemon from PokeAPI,
+              add a detail page, and improve the experience with search, filtering,
+              and pagination.
+            </p>
           </div>
+
+          <div className="flex flex-wrap gap-3">
+            <Link
+              to="/pokemon"
+              className="inline-flex rounded-2xl bg-slate-900 px-5 py-3 text-sm font-semibold text-white transition hover:bg-slate-800 focus:outline-none focus:ring-2 focus:ring-amber-300"
+            >
+              Open Pokemon List
+            </Link>
+            <Link
+              to="/tasks"
+              className="inline-flex rounded-2xl border border-slate-300 px-5 py-3 text-sm font-semibold text-slate-700 transition hover:border-slate-400 hover:bg-white/80"
+            >
+              View Task Board
+            </Link>
+          </div>
+        </div>
+
+        <div className="relative flex items-center justify-center">
+          <img
+            className="h-auto max-h-[65vh] w-full max-w-[32rem] object-contain"
+            src={logoSrc}
+            alt="DB Work Experience logo"
+          />
         </div>
       </div>
     </section>
@@ -67,7 +98,7 @@ function App() {
   }, [])
 
   return (
-    <div className="flex min-h-screen flex-col bg-slate-100 text-slate-900">
+    <div className="flex min-h-screen flex-col bg-amber-50 text-slate-900">
       <Navbar selectedApi={selectedApi} />
 
       <main
@@ -93,6 +124,8 @@ function App() {
           />
           <Route path="/guides" element={<GuidesPage />} />
           <Route path="/guides/:slug" element={<GuidesPage />} />
+          <Route path="/pokemon" element={<PokemonPage />} />
+          <Route path="/pokemon/:name" element={<PokemonDetailPage />} />
           <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>
       </main>
