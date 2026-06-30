@@ -6,6 +6,7 @@ Tailwind keeps structure and styling close together in `className`, which matche
 
 Use Tailwind utility classes for application styling.
 Do not add feature styling in CSS files.
+If you want to browse available utility classes, use https://tailwind.build/classes
 
 ## Start with layout first
 

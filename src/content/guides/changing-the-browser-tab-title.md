@@ -39,8 +39,8 @@ Short titles are easier to read in browser tabs.
 Good examples:
 
 - Pokemon Explorer
-- Star Wars Finder
-- Film Watchlist
+- Pokedex Builder
+- Pokemon Team Tracker
 
 ## Common mistakes
 

@@ -6,6 +6,7 @@ Changing a background colour is one of the fastest ways to make the project feel
 
 Use Tailwind utility classes in `className`.
 Do not move feature styling into custom CSS files.
+You can browse available classes at https://tailwind.build/classes
 
 ## 1. Find the element with the current background
 

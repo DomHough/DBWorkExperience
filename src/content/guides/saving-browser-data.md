@@ -50,8 +50,8 @@ Use data that is easy to understand, such as:
 Examples:
 
 - `pokemon-favourites`
-- `imdb-watchlist`
-- `star-wars-notes`
+- `pokemon-team`
+- `pokemon-notes`
 
 ## Common mistakes
 

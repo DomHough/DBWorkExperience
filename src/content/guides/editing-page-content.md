@@ -1,7 +1,5 @@
 # Editing page content
 
-Changing text is a small task, but it is useful because it helps students learn where page content lives and how JSX is structured.
-
 ## 1. Find the right component
 
 Open the file that renders the text you want to change.
