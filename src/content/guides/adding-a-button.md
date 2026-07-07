@@ -1,73 +1,72 @@
 # Adding a button
 
-Buttons are a good Session 1 task because they are small, visible, and useful in almost every feature.
+Buttons and link-styled buttons are a good Session 1 task because they are small, visible, and useful.
 
-## When to use a button
+## Where to change this in the repo
 
-Use a `<button>` when something happens on the current page, for example:
+- File: `src/App.tsx`
+- Location: inside `HomePage`, around lines `48` to `61`
 
-- open a panel
-- load more items
-- save a favourite
-- add something to a team or watchlist
+## 1. Use a link for page navigation
 
-Use a link when the user should move to another page.
+In this project, the home page actions already use `Link` from `react-router-dom`.
 
-## 1. Pick the right component
-
-Open the page or card component where the action belongs.
-
-In this project, that is often a page in `src/pages` or a repeated card inside a list.
-
-## 2. Add a clear button
-
-Start with a simple button and a label that explains the action.
+Current code:
 
 ```tsx
-<button
-  type="button"
-  className="inline-flex rounded-xl bg-blue-600 px-4 py-2 font-medium text-white hover:bg-blue-700"
->
-  View favourites
-</button>
+<div className="flex flex-wrap gap-3">
+  <Link
+    to="/pokemon"
+    className="inline-flex rounded-2xl bg-slate-900 px-5 py-3 text-sm font-semibold text-white transition hover:bg-slate-800 focus:outline-none focus:ring-2 focus:ring-amber-300"
+  >
+    Open Pokemon List
+  </Link>
+  <Link
+    to="/tasks"
+    className="inline-flex rounded-2xl border border-slate-300 px-5 py-3 text-sm font-semibold text-slate-700 transition hover:border-slate-400 hover:bg-white/80"
+  >
+    View Task Board
+  </Link>
+</div>
 ```
 
-## 3. Make the text specific
+## 2. Add another clear action
 
-Avoid labels like `Click here` or `Submit` when they do not explain enough.
-
-Better examples:
-
-- `Save to favourites`
-- `Add to team`
-- `Open details`
-- `Create custom film`
-
-## 4. Add hover and focus states
-
-Interactive elements should look interactive.
+Updated code example:
 
 ```tsx
-className="inline-flex rounded-xl bg-blue-600 px-4 py-2 font-medium text-white hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-300"
+<div className="flex flex-wrap gap-3">
+  <Link
+    to="/pokemon"
+    className="inline-flex rounded-2xl bg-slate-900 px-5 py-3 text-sm font-semibold text-white transition hover:bg-slate-800 focus:outline-none focus:ring-2 focus:ring-amber-300"
+  >
+    Open Pokemon List
+  </Link>
+  <Link
+    to="/tasks"
+    className="inline-flex rounded-2xl border border-slate-300 px-5 py-3 text-sm font-semibold text-slate-700 transition hover:border-slate-400 hover:bg-white/80"
+  >
+    View Task Board
+  </Link>
+  <Link
+    to="/guides"
+    className="inline-flex rounded-2xl border border-blue-300 bg-blue-50 px-5 py-3 text-sm font-semibold text-blue-700 transition hover:bg-blue-100"
+  >
+    Open Student Guides
+  </Link>
+</div>
 ```
 
-## 5. Connect the button to state
+## 3. Make the label specific
 
-Most buttons in this app will trigger a state update.
+Better labels explain the destination:
 
-```tsx
-<button
-  type="button"
-  onClick={() => setShowFavourites((current) => !current)}
-  className="inline-flex rounded-xl bg-blue-600 px-4 py-2 font-medium text-white hover:bg-blue-700"
->
-  Toggle favourites
-</button>
-```
+- `Open Pokemon List`
+- `View Task Board`
+- `Open Student Guides`
 
 ## Common mistakes
 
-- Using a button when the action should actually be a page link.
-- Writing button text that does not explain the action.
+- Using a plain `<button>` when the action should open another route.
+- Writing vague text such as `Click here`.
 - Forgetting hover or focus styles.
-- Adding a button with no `onClick` and no real purpose.

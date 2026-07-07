@@ -1,25 +1,31 @@
 # Building forms
 
-Forms are useful for tasks such as:
+Forms are useful for later tasks such as custom notes, favourites, or creating your own item.
 
-- create your own item
-- add personal notes
-- name a team or watchlist
+## A good place to add this in the repo
 
-## 1. Start with state for each field
+- File: `src/pages/PokemonPage.tsx`
+- A sensible place: below the existing controls area, around lines `170` to `245`
+
+## 1. Before: uncontrolled inputs
+
+```tsx
+<input placeholder="Name" />
+<textarea placeholder="Description" />
+```
+
+## 2. After: controlled inputs with state
 
 ```tsx
 const [name, setName] = useState('')
 const [description, setDescription] = useState('')
 ```
 
-## 2. Connect the inputs
-
 ```tsx
 <input
   value={name}
   onChange={(event) => setName(event.target.value)}
-  className="rounded-xl border border-slate-200 px-3 py-2"
+  className="rounded-2xl border border-slate-300 px-4 py-3"
   placeholder="Name"
 />
 ```
@@ -28,7 +34,7 @@ const [description, setDescription] = useState('')
 <textarea
   value={description}
   onChange={(event) => setDescription(event.target.value)}
-  className="min-h-28 rounded-xl border border-slate-200 px-3 py-2"
+  className="min-h-28 rounded-2xl border border-slate-300 px-4 py-3"
   placeholder="Description"
 />
 ```
@@ -55,21 +61,8 @@ function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
 }
 ```
 
-## 4. Add labels and simple validation
-
-A beginner-friendly form should still be clear.
-
-- label each field
-- show which fields are required
-- prevent empty submissions
-
-## 5. Show the result after submit
-
-For this project, students should usually show the created item on the page straight away.
-
 ## Common mistakes
 
 - Forgetting `event.preventDefault()`.
 - Letting required fields submit empty values.
-- Building a large form before the basic version works.
-- Not showing the saved or created result anywhere.
+- Building a large form before the list page basics work.

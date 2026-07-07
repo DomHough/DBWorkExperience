@@ -1,76 +1,79 @@
 # Search and filtering
 
-Search and filtering are common Session 2+ tasks. They help users find the right item without changing the original API data.
+Search and filtering are common Session 2 tasks. `src/pages/PokemonPage.tsx` already shows the full pattern.
 
-## Search usually starts with state
+## Where to change this in the repo
+
+- File: `src/pages/PokemonPage.tsx`
+- Around lines: `60` to `68`, `127` to `138`, and `170` to `209`
+
+## 1. Search state
+
+Before:
 
 ```tsx
-const [searchTerm, setSearchTerm] = useState('')
+const [searchText, setSearchText] = useState('')
 ```
 
-Connect that state to an input.
+After with search and filter state:
+
+```tsx
+const [searchText, setSearchText] = useState('')
+const [selectedType, setSelectedType] = useState('all')
+const deferredSearchText = useDeferredValue(searchText)
+```
+
+## 2. Input controls
+
+Current repo answer:
 
 ```tsx
 <input
-  value={searchTerm}
-  onChange={(event) => setSearchTerm(event.target.value)}
-  className="rounded-xl border border-slate-200 px-3 py-2"
-  placeholder="Search items"
+  type="search"
+  value={searchText}
+  onChange={(event) => setSearchText(event.target.value)}
+  placeholder="Search by Pokemon name"
+  className="w-full rounded-2xl border border-slate-300 px-4 py-3 text-sm text-slate-900 outline-none transition focus:border-blue-400 focus:ring-2 focus:ring-blue-100"
 />
-```
-
-## Filter the list during rendering
-
-```tsx
-const visibleItems = items.filter((item) =>
-  item.title.toLowerCase().includes(searchTerm.toLowerCase()),
-)
-```
-
-This is usually better than storing a second copy of the filtered list in state.
-
-## Add a filter control
-
-```tsx
-const [selectedType, setSelectedType] = useState('all')
 ```
 
 ```tsx
 <select
   value={selectedType}
   onChange={(event) => setSelectedType(event.target.value)}
-  className="rounded-xl border border-slate-200 px-3 py-2"
+  className="w-full rounded-2xl border border-slate-300 px-4 py-3 text-sm text-slate-900 outline-none transition focus:border-blue-400 focus:ring-2 focus:ring-blue-100 lg:min-w-44"
 >
-  <option value="all">All</option>
-  <option value="favourite">Favourites</option>
+  <option value="all">All types</option>
 </select>
 ```
 
-## Combine search and filtering
+## 3. Filter the list during rendering
+
+Before:
 
 ```tsx
-const visibleItems = items.filter((item) => {
-  const matchesSearch = item.title
-    .toLowerCase()
-    .includes(searchTerm.toLowerCase())
-
-  const matchesFilter = selectedType === 'all' || item.type === selectedType
-
-  return matchesSearch && matchesFilter
-})
+const visiblePokemon = pokemonPage?.items ?? []
 ```
 
-## Handle no results clearly
-
-If nothing matches, tell the user.
+After:
 
 ```tsx
-{visibleItems.length === 0 ? <p>No matching items found.</p> : null}
+const visiblePokemon = sortPokemon(
+  (pokemonPage?.items ?? []).filter((pokemon) => {
+    const matchesSearch = pokemon.name
+      .toLowerCase()
+      .includes(deferredSearchText.trim().toLowerCase())
+    const matchesType =
+      selectedType === 'all' || pokemon.types.includes(selectedType)
+
+    return matchesSearch && matchesType
+  }),
+  sortMode,
+)
 ```
 
 ## Common mistakes
 
-- Storing filtered results in state when they can be calculated.
+- Storing filtered results in state instead of calculating them.
 - Forgetting to make search case-insensitive.
-- Adding search and filter controls before the basic list works.
-- Not handling the empty results case.
+- Adding controls before the base list works.

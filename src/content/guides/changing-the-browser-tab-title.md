@@ -1,49 +1,58 @@
 # Changing the browser tab title
 
-The browser tab title is the text shown at the top of the browser tab. Changing it is a simple way to make the project feel more like the student's own work.
+The browser tab title is the text shown in the browser tab. In this repo, it can come from both `index.html` and React code.
 
-## 1. Find where the title is set
+## Where to change this in the repo
 
-In this project, the browser tab title starts in `index.html`.
+- `index.html`, around line `7`
+- `src/App.tsx`, inside `HomePage`, around line `28`
+- `src/hooks/useDocumentTitle.ts`, lines `3` to `6`
 
-Look for the `<title>` tag.
+## 1. Check the starter title in `index.html`
 
-Example:
+Current code:
 
 ```html
-<title>DB Work Experience</title>
+<title>Pokemon Work Experience</title>
 ```
 
-## 2. Replace the starter title
-
-Change the text inside the `<title>` tag.
-
-Example:
+Updated code example:
 
 ```html
 <title>My Pokemon Project</title>
 ```
 
-Choose a title that matches the API track or project idea.
+## 2. Check the React title on the home page
 
-## 3. Refresh the browser
+Current code in `src/App.tsx`:
 
-Save the file and refresh the page.
+```tsx
+useDocumentTitle('Pokemon Work Experience')
+```
 
-The new text should now appear in the browser tab.
+Updated code example:
 
-## 4. Keep it short and clear
+```tsx
+useDocumentTitle('My Pokemon Project')
+```
 
-Short titles are easier to read in browser tabs.
+## 3. Understand why both places matter
 
-Good examples:
+The helper in `src/hooks/useDocumentTitle.ts` is:
 
-- Pokemon Explorer
-- Pokedex Builder
-- Pokemon Team Tracker
+```tsx
+export function useDocumentTitle(title: string) {
+  useEffect(() => {
+    document.title = title
+  }, [title])
+}
+```
+
+`index.html` gives the first title before React loads.
+`useDocumentTitle(...)` updates the title for a specific page after React renders.
 
 ## Common mistakes
 
-- Changing a heading on the page instead of the browser tab title.
-- Editing the wrong file.
-- Writing a title that is too long to read easily in the tab.
+- Changing a page heading instead of the browser tab title.
+- Updating `index.html` but forgetting the React page title.
+- Writing a title that is much longer than the browser tab can show clearly.

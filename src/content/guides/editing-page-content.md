@@ -1,45 +1,53 @@
 # Editing page content
 
-## 1. Find the right component
+Editing page content is a good Session 1 task because it is visible straight away and helps the project feel more personal.
 
-Open the file that renders the text you want to change.
+## Where to change this in the repo
 
-Example:
+- File: `src/App.tsx`
+- Location: inside `HomePage`, around lines `35` to `45`
+
+## 1. Find the right text
+
+Current code:
 
 ```tsx
-<h1 className="text-3xl font-semibold text-slate-900">Choose API Track</h1>
+<p className="text-sm font-semibold uppercase tracking-[0.24em] text-amber-700">
+  Pokemon API Starter
+</p>
+<h1 className="text-4xl font-bold tracking-tight text-slate-900 sm:text-5xl">
+  Build a simple Pokemon feature in small steps
+</h1>
+<p className="max-w-2xl text-base leading-7 text-slate-700">
+  Start with a page and a route, then fetch real Pokemon from PokeAPI,
+  add a detail page, and improve the experience with search, filtering,
+  and pagination.
+</p>
 ```
 
 ## 2. Replace the starter copy
 
-Edit the text between the tags.
+Updated code example:
 
 ```tsx
-<h1 className="text-3xl font-semibold text-slate-900">Build your own film list</h1>
+<p className="text-sm font-semibold uppercase tracking-[0.24em] text-amber-700">
+  My Pokemon Project
+</p>
+<h1 className="text-4xl font-bold tracking-tight text-slate-900 sm:text-5xl">
+  Explore Pokemon I choose from the API
+</h1>
+<p className="max-w-2xl text-base leading-7 text-slate-700">
+  I am building a Pokemon page that shows a list, lets users click into details,
+  and helps me practise React and API data.
+</p>
 ```
 
-You can also update paragraphs so the page explains the project more clearly.
+## 3. Keep the copy matched to the page
 
-## 3. Write for the actual feature
-
-As the project grows, the copy should match what the page really does.
-
-Examples:
-
-- explain that the page shows a list
-- explain that items can be clicked for details
-- explain that search, favourites, or notes are available
-
-## 4. Keep it short
-
-This project is intentionally simple. Long blocks of text will make pages harder to scan and may break the layout.
-
-## 5. Re-check the page
-
-Refresh and make sure the new wording still fits on mobile and desktop.
+Good homepage copy should explain what the page is for right now, not what it might do later.
 
 ## Common mistakes
 
 - Editing the wrong file.
-- Adding too much text.
-- Leaving old wording that no longer matches the page behaviour.
+- Updating only one line and leaving the rest of the copy mismatched.
+- Adding too much text and making the page harder to scan.

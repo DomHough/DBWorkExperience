@@ -1,28 +1,13 @@
-import { useEffect, useMemo, useState } from 'react'
+import { useState } from 'react'
 import { Link, Navigate, Route, Routes, useLocation } from 'react-router-dom'
 import { Navbar } from './components/Navbar'
-import defaultLogo from './assets/db.svg'
 import pokeLogo from './assets/db_pokeball.svg'
-import type { ApiKey } from './data/tasks'
-import { loadTaskBoardState, TASK_BOARD_STORAGE_KEY } from './data/tasks'
 import { useDocumentTitle } from './hooks/useDocumentTitle'
 import { GuidesPage } from './pages/GuidesPage'
 import { PokemonDetailPage } from './pages/PokemonDetailPage'
 import { PokemonPage } from './pages/PokemonPage'
 import { SettingsPage } from './pages/SettingsPage'
 import { TasksPage } from './pages/TasksPage'
-
-function readSelectedApiFromStorage(): ApiKey | null {
-  return loadTaskBoardState().selectedApi
-}
-
-function getLogoSrc(selectedApi: ApiKey | null) {
-  if (selectedApi === 'pokeapi') {
-    return pokeLogo
-  }
-
-  return defaultLogo
-}
 
 function HomePage({ logoSrc }: { logoSrc: string }) {
   useDocumentTitle('Pokemon Work Experience')
@@ -75,31 +60,19 @@ function HomePage({ logoSrc }: { logoSrc: string }) {
 
 function App() {
   const location = useLocation()
-  const [selectedApi, setSelectedApi] = useState<ApiKey | null>(() =>
-    readSelectedApiFromStorage(),
-  )
-  const logoSrc = useMemo(() => getLogoSrc(selectedApi), [selectedApi])
+  const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(false)
+  const logoSrc = pokeLogo
   const isHomePage = location.pathname === '/'
   const isGuidesPage =
     location.pathname === '/guides' || location.pathname.startsWith('/guides/')
   const isTasksPage = location.pathname === '/tasks'
 
-  useEffect(() => {
-    const handleStorageUpdate = (event: StorageEvent) => {
-      if (event.key && event.key !== TASK_BOARD_STORAGE_KEY) {
-        return
-      }
-
-      setSelectedApi(readSelectedApiFromStorage())
-    }
-
-    window.addEventListener('storage', handleStorageUpdate)
-    return () => window.removeEventListener('storage', handleStorageUpdate)
-  }, [])
-
   return (
-    <div className="flex min-h-screen flex-col bg-amber-50 text-slate-900">
-      <Navbar selectedApi={selectedApi} />
+    <div className="flex min-h-screen flex-col bg-amber-50 text-slate-900 md:flex-row">
+      <Navbar
+        isCollapsed={isSidebarCollapsed}
+        onToggleCollapse={() => setIsSidebarCollapsed((current) => !current)}
+      />
 
       <main
         className={
@@ -114,14 +87,8 @@ function App() {
       >
         <Routes>
           <Route path="/" element={<HomePage logoSrc={logoSrc} />} />
-          <Route
-            path="/tasks"
-            element={<TasksPage onSelectedApiChange={setSelectedApi} />}
-          />
-          <Route
-            path="/settings"
-            element={<SettingsPage onSelectedApiChange={setSelectedApi} />}
-          />
+          <Route path="/tasks" element={<TasksPage />} />
+          <Route path="/settings" element={<SettingsPage />} />
           <Route path="/guides" element={<GuidesPage />} />
           <Route path="/guides/:slug" element={<GuidesPage />} />
           <Route path="/pokemon" element={<PokemonPage />} />

@@ -1,37 +1,15 @@
 import { useState } from 'react'
-import type { ApiKey } from '../data/tasks'
-import {
-  API_OPTIONS,
-  createDefaultTaskBoardState,
-  loadTaskBoardState,
-  saveTaskBoardState,
-} from '../data/tasks'
+import { createDefaultTaskBoardState, saveTaskBoardState } from '../data/tasks'
+import { useDocumentTitle } from '../hooks/useDocumentTitle'
 
-interface SettingsPageProps {
-  onSelectedApiChange?: (selectedApi: ApiKey | null) => void
-}
+export function SettingsPage() {
+  const [feedback, setFeedback] = useState('')
 
-export function SettingsPage({ onSelectedApiChange }: SettingsPageProps) {
-  const [selectedApi, setSelectedApi] = useState<ApiKey | null>(
-    () => loadTaskBoardState().selectedApi,
-  )
-
-  function handleApiChange(api: ApiKey) {
-    const nextState = {
-      ...loadTaskBoardState(),
-      selectedApi: api,
-    }
-
-    saveTaskBoardState(nextState)
-    setSelectedApi(api)
-    onSelectedApiChange?.(api)
-  }
+  useDocumentTitle('Project Settings')
 
   function handleReset() {
-    const nextState = createDefaultTaskBoardState()
-    saveTaskBoardState(nextState)
-    setSelectedApi(nextState.selectedApi)
-    onSelectedApiChange?.(nextState.selectedApi)
+    saveTaskBoardState(createDefaultTaskBoardState())
+    setFeedback('Task progress has been reset to the default Pokemon starting state.')
   }
 
   return (
@@ -42,53 +20,23 @@ export function SettingsPage({ onSelectedApiChange }: SettingsPageProps) {
         </p>
         <h1 className="text-3xl font-semibold text-slate-900">Project Settings</h1>
         <p className="max-w-2xl text-slate-700">
-          Change the active API track for the task board, or reset progress back to
-          the default starting state.
+          Use this page to reset the task board back to its default starting state.
         </p>
       </header>
 
-      <section className="rounded-[1.75rem] border border-slate-200 bg-white p-6 shadow-sm">
-        <div className="grid gap-4">
-          <div className="grid gap-1">
-            <h2 className="text-lg font-semibold text-slate-900">Active API Track</h2>
-            <p className="text-sm leading-6 text-slate-600">
-              This decides which set of tasks appears when the board opens.
-            </p>
-          </div>
-
-          <div className="grid gap-3 sm:grid-cols-2">
-            {API_OPTIONS.map((option) => {
-              const isSelected = selectedApi === option.key
-
-              return (
-                <button
-                  key={option.key}
-                  type="button"
-                  className={
-                    isSelected
-                      ? 'rounded-2xl border border-blue-300 bg-blue-50 p-4 text-left shadow-sm'
-                      : 'rounded-2xl border border-slate-200 bg-white p-4 text-left shadow-sm hover:border-blue-300'
-                  }
-                  onClick={() => handleApiChange(option.key)}
-                >
-                  <p className="text-base font-semibold text-slate-900">{option.label}</p>
-                  <p className="mt-1 text-sm text-slate-600">
-                    {isSelected ? 'Currently selected for the board.' : 'Switch to this task track.'}
-                  </p>
-                </button>
-              )
-            })}
-          </div>
-        </div>
-      </section>
+      {feedback ? (
+        <p className="rounded-2xl border border-emerald-200 bg-emerald-50 px-4 py-3 text-sm text-emerald-700 shadow-sm">
+          {feedback}
+        </p>
+      ) : null}
 
       <section className="rounded-[1.75rem] border border-slate-200 bg-white p-6 shadow-sm">
         <div className="grid gap-4">
           <div className="grid gap-1">
             <h2 className="text-lg font-semibold text-slate-900">Reset Task Progress</h2>
             <p className="text-sm leading-6 text-slate-600">
-              Clears saved progress, closes out any completed work, and returns the
-              board to the default starting point.
+              Clears saved task progress and returns the board to the default Pokemon
+              starter tasks.
             </p>
           </div>
 

@@ -1,7 +1,6 @@
 import { useEffect, useMemo, useState } from 'react'
 import { Link } from 'react-router-dom'
 import type {
-  ApiKey,
   ApiTaskProgress,
   DifficultyTag,
   PriorityTag,
@@ -10,26 +9,12 @@ import type {
   TaskStatus,
 } from '../data/tasks'
 import {
-  API_OPTIONS,
   KANBAN_COLUMNS,
   TASKS_BY_API,
   loadTaskBoardState,
   saveTaskBoardState,
 } from '../data/tasks'
 import { GUIDES } from '../data/guides'
-
-type ApiAvailabilityStatus = 'checking' | 'online' | 'offline'
-
-interface ApiAvailability {
-  status: ApiAvailabilityStatus
-  message: string
-}
-
-const API_HEALTH_ENDPOINTS: Record<ApiKey, string> = {
-  pokeapi: 'https://pokeapi.co/api/v2/pokemon?limit=1',
-}
-
-const API_HEALTH_TIMEOUT_MS = 8000
 
 function isTaskUnlocked(task: TaskDefinition, apiProgress: ApiTaskProgress): boolean {
   if (!task.dependencies?.length) {
@@ -61,12 +46,7 @@ function sessionLabel(session: SessionTag): string {
     return 'Session 1'
   }
 
-  return 'Session 2+'
-}
-
-function apiOptionDescription(api: ApiKey): string {
-  void api
-  return 'Build a Pokemon list page, detail page, search, and filtering in guided steps.'
+  return 'Session 2'
 }
 
 function columnDescription(status: TaskStatus): string {
@@ -111,143 +91,30 @@ function sessionTagClass(session: SessionTag): string {
   return 'rounded-full border border-emerald-200 bg-emerald-50 px-2 py-1 text-xs leading-none text-emerald-700'
 }
 
-function availabilityTagClass(status: ApiAvailabilityStatus): string {
-  if (status === 'online') {
-    return 'rounded-full border border-emerald-200 bg-emerald-50 px-2.5 py-1 text-xs font-medium text-emerald-700'
-  }
-
-  if (status === 'offline') {
-    return 'rounded-full border border-red-200 bg-red-50 px-2.5 py-1 text-xs font-medium text-red-700'
-  }
-
-  return 'rounded-full border border-amber-200 bg-amber-50 px-2.5 py-1 text-xs font-medium text-amber-700'
-}
-
-function availabilityLabel(status: ApiAvailabilityStatus): string {
-  if (status === 'online') {
-    return 'Online'
-  }
-
-  if (status === 'offline') {
-    return 'Unavailable'
-  }
-
-  return 'Checking'
-}
-
-function createInitialAvailabilityState(): Record<ApiKey, ApiAvailability> {
-  return {
-    pokeapi: { status: 'checking', message: 'Checking API availability...' },
-  }
-}
-
-interface TasksPageProps {
-  onSelectedApiChange?: (selectedApi: ApiKey | null) => void
-}
-
-export function TasksPage({ onSelectedApiChange }: TasksPageProps) {
+export function TasksPage() {
   const [state, setState] = useState(() => loadTaskBoardState())
+  const [selectedSession, setSelectedSession] = useState<SessionTag>('session-1')
   const [activeTaskId, setActiveTaskId] = useState<string | null>(null)
   const [dragTaskId, setDragTaskId] = useState<string | null>(null)
   const [feedback, setFeedback] = useState<string>('')
-  const [apiAvailabilityRefreshKey, setApiAvailabilityRefreshKey] = useState(0)
-  const [apiAvailability, setApiAvailability] = useState<Record<ApiKey, ApiAvailability>>(
-    () => createInitialAvailabilityState(),
-  )
-  const [isCheckingApiAvailability, setIsCheckingApiAvailability] = useState(false)
 
   useEffect(() => {
     saveTaskBoardState(state)
   }, [state])
 
-  useEffect(() => {
-    onSelectedApiChange?.(state.selectedApi)
-  }, [onSelectedApiChange, state.selectedApi])
-
-  const selectedApi = state.selectedApi
-  const tasks = selectedApi ? TASKS_BY_API[selectedApi] : null
-  const progress = selectedApi ? state.progress[selectedApi] : null
-
-  useEffect(() => {
-    if (selectedApi) {
-      return
-    }
-
-    const controllers: AbortController[] = []
-    let isCancelled = false
-
-    async function checkApiAvailability() {
-      setIsCheckingApiAvailability(true)
-      setApiAvailability(createInitialAvailabilityState())
-
-      const results = await Promise.all(
-        API_OPTIONS.map(async (option) => {
-          const controller = new AbortController()
-          const timeoutId = window.setTimeout(() => controller.abort(), API_HEALTH_TIMEOUT_MS)
-          controllers.push(controller)
-
-          try {
-            const response = await fetch(API_HEALTH_ENDPOINTS[option.key], {
-              signal: controller.signal,
-            })
-
-            if (!response.ok) {
-              throw new Error(`${response.status} ${response.statusText}`)
-            }
-
-            return [
-              option.key,
-              {
-                status: 'online',
-                message: `${option.label} responded successfully.`,
-              },
-            ] as const
-          } catch (error) {
-            const message =
-              error instanceof Error && error.name === 'AbortError'
-                ? `Timed out after ${API_HEALTH_TIMEOUT_MS / 1000} seconds.`
-                : error instanceof Error
-                  ? error.message
-                  : 'Request failed.'
-
-            return [
-              option.key,
-              {
-                status: 'offline',
-                message: `Could not reach ${option.label}: ${message}`,
-              },
-            ] as const
-          } finally {
-            window.clearTimeout(timeoutId)
-          }
-        }),
-      )
-
-      if (isCancelled) {
-        return
-      }
-
-      setApiAvailability(Object.fromEntries(results) as Record<ApiKey, ApiAvailability>)
-      setIsCheckingApiAvailability(false)
-    }
-
-    void checkApiAvailability()
-
-    return () => {
-      isCancelled = true
-      for (const controller of controllers) {
-        controller.abort()
-      }
-    }
-  }, [apiAvailabilityRefreshKey, selectedApi])
+  const selectedApi = 'pokeapi' as const
+  const tasks = TASKS_BY_API[selectedApi]
+  const progress = state.progress[selectedApi]
 
   const visibleTasks = useMemo(() => {
     if (!tasks || !progress) {
       return []
     }
 
-    return tasks.filter((task) => isTaskUnlocked(task, progress))
-  }, [progress, tasks])
+    return tasks.filter(
+      (task) => task.session === selectedSession && isTaskUnlocked(task, progress),
+    )
+  }, [progress, selectedSession, tasks])
 
   const activeTask =
     activeTaskId
@@ -257,29 +124,7 @@ export function TasksPage({ onSelectedApiChange }: TasksPageProps) {
     ? GUIDES.filter((guide) => activeTask.guideSlugs?.includes(guide.slug))
     : []
 
-  function chooseApi(api: ApiKey) {
-    const availability = apiAvailability[api]
-
-    if (availability.status === 'offline') {
-      setFeedback(availability.message)
-      return
-    }
-
-    if (availability.status === 'checking') {
-      setFeedback('API availability checks are still running. Wait for them to finish first.')
-      return
-    }
-
-    setFeedback('')
-    setActiveTaskId(null)
-    setState((previous) => ({ ...previous, selectedApi: api }))
-  }
-
   function updateTaskStatus(taskId: string, status: TaskStatus) {
-    if (!selectedApi || !progress) {
-      return
-    }
-
     const task = TASKS_BY_API[selectedApi].find((item) => item.id === taskId)
     if (!task) {
       return
@@ -307,10 +152,6 @@ export function TasksPage({ onSelectedApiChange }: TasksPageProps) {
   }
 
   function toggleAcceptance(taskId: string, criterionIndex: number) {
-    if (!selectedApi) {
-      return
-    }
-
     setState((previous) => {
       const existing = previous.progress[selectedApi][taskId]
       const checks = [...existing.checks]
@@ -332,82 +173,6 @@ export function TasksPage({ onSelectedApiChange }: TasksPageProps) {
     })
   }
 
-  if (!selectedApi) {
-    return (
-      <section className="flex min-h-0 flex-1 flex-col gap-6">
-        <header className="grid gap-3 rounded-[1.75rem] border border-slate-200 bg-white p-6 shadow-sm">
-          <p className="text-xs font-semibold uppercase tracking-[0.2em] text-slate-500">
-            Task Setup
-          </p>
-          <h1 className="text-3xl font-semibold text-slate-900">Choose API Track</h1>
-          <p className="max-w-3xl text-slate-700">
-            Pick the API track first. The board then reveals the relevant tasks and
-            keeps progress saved locally in the browser.
-          </p>
-          <div className="flex flex-wrap items-center gap-3">
-            <span className="text-sm text-slate-600">
-              {isCheckingApiAvailability
-                ? 'Checking that all APIs are available before students choose a track.'
-                : 'API availability has been checked for each track below.'}
-            </span>
-            <button
-              type="button"
-              className="rounded-xl border border-slate-200 bg-white px-3 py-2 text-sm font-medium text-slate-700 shadow-sm hover:border-blue-300 hover:bg-slate-50 disabled:cursor-not-allowed disabled:opacity-60"
-              onClick={() => {
-                setFeedback('')
-                setApiAvailabilityRefreshKey((current) => current + 1)
-              }}
-              disabled={isCheckingApiAvailability}
-            >
-              Check again
-            </button>
-          </div>
-        </header>
-
-        {feedback ? (
-          <p className="rounded-2xl border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700 shadow-sm">
-            {feedback}
-          </p>
-        ) : null}
-
-        <div
-          className="grid gap-5 [grid-template-columns:repeat(auto-fit,minmax(260px,1fr))]"
-          role="list"
-        >
-          {API_OPTIONS.map((option) => (
-            <button
-              key={option.key}
-              type="button"
-              className="group cursor-pointer rounded-[1.75rem] border border-slate-200 bg-white p-5 text-left shadow-sm transition hover:-translate-y-0.5 hover:border-blue-300 hover:shadow-md disabled:cursor-not-allowed disabled:hover:translate-y-0 disabled:hover:border-slate-200 disabled:hover:shadow-sm"
-              onClick={() => chooseApi(option.key)}
-              disabled={apiAvailability[option.key].status !== 'online'}
-            >
-              <div className="grid gap-3">
-                <div className="flex items-center justify-between">
-                  <span className="rounded-full bg-slate-100 px-3 py-1 text-xs font-semibold uppercase tracking-wide text-slate-600">
-                    API Track
-                  </span>
-                  <span className={availabilityTagClass(apiAvailability[option.key].status)}>
-                    {availabilityLabel(apiAvailability[option.key].status)}
-                  </span>
-                </div>
-                <div className="grid gap-2">
-                  <h2 className="text-xl font-semibold text-slate-900">{option.label}</h2>
-                  <p className="text-sm leading-6 text-slate-600">
-                    {apiOptionDescription(option.key)}
-                  </p>
-                  <p className="text-sm leading-6 text-slate-500">
-                    {apiAvailability[option.key].message}
-                  </p>
-                </div>
-              </div>
-            </button>
-          ))}
-        </div>
-      </section>
-    )
-  }
-
   const boardProgress = state.progress[selectedApi]
 
   return (
@@ -418,28 +183,59 @@ export function TasksPage({ onSelectedApiChange }: TasksPageProps) {
         </p>
       ) : null}
 
-      <div className="grid flex-1 min-h-0 gap-8 md:grid-cols-3">
+      <div className="grid min-h-0 flex-1 grid-rows-[auto_minmax(0,1fr)] content-start items-start gap-8 md:grid-cols-3">
+        <header className="grid self-start gap-4 rounded-[1.75rem] border border-slate-200 bg-white p-5 shadow-sm md:col-span-3 lg:grid-cols-[minmax(0,1fr)_auto] lg:items-center">
+          <div className="grid gap-1">
+            <p className="text-xs font-semibold uppercase tracking-[0.2em] text-slate-500">
+              Task Session
+            </p>
+            <h1 className="text-2xl font-semibold text-slate-900">Choose Session Tasks</h1>
+            <p className="max-w-2xl text-sm leading-6 text-slate-600">
+              Switch between Session 1 and Session 2 tasks without needing to complete
+              earlier-session work first.
+            </p>
+          </div>
+
+          <div
+            className="inline-flex self-start rounded-2xl border border-slate-200 bg-slate-100 p-1 lg:self-center"
+            role="tablist"
+            aria-label="Task sessions"
+          >
+            {(['session-1', 'session-2'] as const).map((session) => {
+              const isActive = session === selectedSession
+
+              return (
+                <button
+                  key={session}
+                  type="button"
+                  role="tab"
+                  aria-selected={isActive}
+                  className={
+                    isActive
+                      ? 'min-w-24 rounded-xl bg-white px-4 py-2 text-center text-sm font-semibold text-slate-900 shadow-sm'
+                      : 'min-w-24 rounded-xl px-4 py-2 text-center text-sm font-medium text-slate-600 hover:text-slate-900'
+                  }
+                  onClick={() => {
+                    setSelectedSession(session)
+                    setActiveTaskId(null)
+                  }}
+                >
+                  {sessionLabel(session)}
+                </button>
+              )
+            })}
+          </div>
+        </header>
+
         {KANBAN_COLUMNS.map((column) => {
           const columnTasks = visibleTasks.filter(
             (task) => boardProgress[task.id]?.status === column.key,
           )
-          const sessionGroups: Array<{ session: SessionTag; tasks: TaskDefinition[] }> = (
-            [
-              {
-                session: 'session-1' as const,
-                tasks: columnTasks.filter((task) => task.session === 'session-1'),
-              },
-              {
-                session: 'session-2-plus' as const,
-                tasks: columnTasks.filter((task) => task.session === 'session-2-plus'),
-              },
-            ] satisfies Array<{ session: SessionTag; tasks: TaskDefinition[] }>
-          ).filter((group) => group.tasks.length > 0)
 
           return (
             <section
               key={column.key}
-              className="flex min-h-[16rem] flex-col rounded-2xl border border-slate-200 bg-white p-6 shadow-sm md:min-h-0"
+              className="flex min-h-[16rem] self-stretch flex-col rounded-2xl border border-slate-200 bg-white p-6 shadow-sm md:min-h-0"
               onDragOver={(event) => event.preventDefault()}
               onDrop={() => {
                 if (dragTaskId) {
@@ -472,48 +268,42 @@ export function TasksPage({ onSelectedApiChange }: TasksPageProps) {
                   </div>
                 ) : null}
 
-                {sessionGroups.map((group) => (
-                  <div key={`${column.key}-${group.session}`} className="grid gap-3">
-                    <div className="flex items-center gap-2">
-                      <span className={sessionTagClass(group.session)}>
-                        {sessionLabel(group.session)}
+                <div className="flex items-center gap-2">
+                  <span className={sessionTagClass(selectedSession)}>
+                    {sessionLabel(selectedSession)}
+                  </span>
+                  <span className="text-xs text-slate-500">
+                    {columnTasks.length} task{columnTasks.length === 1 ? '' : 's'}
+                  </span>
+                </div>
+
+                {columnTasks.map((task) => (
+                  <article
+                    key={task.id}
+                    className="grid cursor-grab gap-3 rounded-2xl border border-slate-200 bg-white p-4 shadow-sm transition hover:border-blue-300 hover:shadow-md"
+                    draggable
+                    onDragStart={() => setDragTaskId(task.id)}
+                    onDragEnd={() => setDragTaskId(null)}
+                    onClick={() => setActiveTaskId(task.id)}
+                  >
+                    <div className="grid gap-1">
+                      <h3 className="text-base leading-snug font-semibold text-slate-900">
+                        {task.title}
+                      </h3>
+                      <p className="text-sm leading-6 text-slate-700">{task.description}</p>
+                    </div>
+                    <div className="flex flex-wrap gap-2">
+                      <span className={sessionTagClass(task.session)}>
+                        {sessionLabel(task.session)}
                       </span>
-                      <span className="text-xs text-slate-500">
-                        {group.tasks.length} task{group.tasks.length === 1 ? '' : 's'}
+                      <span className={priorityTagClass(task.priority)}>
+                        Priority: {toTitleCase(task.priority)}
+                      </span>
+                      <span className={difficultyTagClass(task.difficulty)}>
+                        Difficulty: {toTitleCase(task.difficulty)}
                       </span>
                     </div>
-
-                    {group.tasks.map((task) => (
-                      <article
-                        key={task.id}
-                        className="grid cursor-grab gap-3 rounded-2xl border border-slate-200 bg-white p-4 shadow-sm transition hover:border-blue-300 hover:shadow-md"
-                        draggable
-                        onDragStart={() => setDragTaskId(task.id)}
-                        onDragEnd={() => setDragTaskId(null)}
-                        onClick={() => setActiveTaskId(task.id)}
-                      >
-                        <div className="grid gap-1">
-                          <h3 className="text-base leading-snug font-semibold text-slate-900">
-                            {task.title}
-                          </h3>
-                          <p className="text-sm leading-6 text-slate-700">
-                            {task.description}
-                          </p>
-                        </div>
-                        <div className="flex flex-wrap gap-2">
-                          <span className={sessionTagClass(task.session)}>
-                            {sessionLabel(task.session)}
-                          </span>
-                          <span className={priorityTagClass(task.priority)}>
-                            Priority: {toTitleCase(task.priority)}
-                          </span>
-                          <span className={difficultyTagClass(task.difficulty)}>
-                            Difficulty: {toTitleCase(task.difficulty)}
-                          </span>
-                        </div>
-                      </article>
-                    ))}
-                  </div>
+                  </article>
                 ))}
               </div>
             </section>
@@ -635,7 +425,10 @@ export function TasksPage({ onSelectedApiChange }: TasksPageProps) {
                 </details>
               ) : null}
 
-              <details className="group rounded-2xl border border-slate-200 bg-white p-4 shadow-md shadow-slate-900/10">
+              <details
+                open
+                className="group rounded-2xl border border-slate-200 bg-white p-4 shadow-md shadow-slate-900/10"
+              >
                 <summary className="block w-full cursor-pointer list-none [&::-webkit-details-marker]:hidden">
                   <span className="flex w-full items-center justify-between gap-3">
                     <span className="text-base font-semibold text-slate-900">

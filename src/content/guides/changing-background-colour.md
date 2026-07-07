@@ -2,55 +2,55 @@
 
 Changing a background colour is one of the fastest ways to make the project feel different without adding much complexity.
 
-## Project rule
+## Where to change this in the repo
 
-Use Tailwind utility classes in `className`.
-Do not move feature styling into custom CSS files.
-You can browse available classes at https://tailwind.build/classes
+- File: `src/App.tsx`
+- Around lines: `102` to `118`
 
-## 1. Find the element with the current background
+## 1. Find the current background class
 
-Look for a wrapper such as:
-
-- `<main>`
-- `<section>`
-- `<div>`
-
-In this project you will often see classes like `bg-white` or `bg-slate-100`.
+Current code:
 
 ```tsx
-<div className="flex min-h-screen flex-col bg-slate-100 text-slate-900">
+<div className="flex min-h-screen flex-col bg-amber-50 text-slate-900 md:flex-row">
 ```
 
 ## 2. Swap the Tailwind class
 
-Replace the old background colour with a new one.
+Updated code example:
 
 ```tsx
-<div className="flex min-h-screen flex-col bg-amber-50 text-slate-900">
+<div className="flex min-h-screen flex-col bg-sky-50 text-slate-900 md:flex-row">
 ```
 
-You can do the same on cards and panels.
+You can swap `bg-amber-50` for another Tailwind colour such as:
 
-## 3. Check the text colour
+- `bg-slate-100`
+- `bg-emerald-50`
+- `bg-rose-50`
 
-If the background becomes darker or more colourful, you may need to change the text colour too.
+## 3. Check text contrast
+
+If you choose a darker background, you may need to update the text colour too.
+
+Before:
 
 ```tsx
-<section className="rounded-3xl bg-slate-900 p-6 text-white">
+<section className="rounded-3xl border border-slate-200 bg-white p-5 shadow-sm">
 ```
 
-## 4. Check mobile and desktop
+After example:
 
-A colour that looks fine on a large screen may feel too strong or reduce readability on mobile.
+```tsx
+<section className="rounded-3xl border border-slate-200 bg-slate-900 p-5 text-white shadow-sm">
+```
 
-## 5. Keep the visual system consistent
+## 4. Keep the change simple
 
-Try not to make every section a different colour. One or two clear colour decisions usually look better than many unrelated ones.
+For Session 1, one clear background change is enough. Do not move styling into CSS files.
 
 ## Common mistakes
 
-- Changing the wrong element and not seeing any visible difference.
-- Picking a colour that makes text hard to read.
-- Adding custom CSS instead of Tailwind classes.
-- Using too many unrelated colours.
+- Changing the wrong wrapper and not seeing a visible difference.
+- Choosing a background that makes text hard to read.
+- Adding custom CSS instead of using Tailwind utility classes.

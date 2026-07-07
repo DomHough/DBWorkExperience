@@ -1,3 +1,4 @@
+import type { ClipboardEvent } from 'react'
 import { Link, useParams } from 'react-router-dom'
 import { MarkdownRenderer } from '../components/MarkdownRenderer'
 import { findGuide, GUIDES } from '../data/guides'
@@ -5,6 +6,9 @@ import { findGuide, GUIDES } from '../data/guides'
 export function GuidesPage() {
   const { slug } = useParams()
   const selectedGuide = findGuide(slug)
+  const blockCopy = (event: ClipboardEvent<HTMLElement>) => {
+    event.preventDefault()
+  }
 
   if (!selectedGuide) {
     return (
@@ -33,7 +37,10 @@ export function GuidesPage() {
   return (
     <section className="grid gap-6">
       <div className="grid gap-6 xl:grid-cols-[320px_minmax(0,1fr)]">
-        <aside className="grid gap-4 self-start rounded-[1.75rem] border border-slate-200 bg-white p-4 shadow-sm xl:sticky">
+        <aside
+          className="grid select-none gap-4 self-start rounded-[1.75rem] border border-slate-200 bg-white p-4 shadow-sm xl:sticky"
+          onCopy={blockCopy}
+        >
           <div className="grid gap-1">
             <h2 className="text-lg font-semibold text-slate-900">Available guides</h2>
             <p className="text-sm text-slate-600">Pick a topic to open its markdown guide.</p>
@@ -65,7 +72,10 @@ export function GuidesPage() {
           </nav>
         </aside>
 
-        <article className="grid gap-6 rounded-[1.75rem] border border-slate-200 bg-white p-6 shadow-sm md:p-8">
+        <article
+          className="grid select-none gap-6 rounded-[1.75rem] border border-slate-200 bg-white p-6 shadow-sm md:p-8"
+          onCopy={blockCopy}
+        >
           <header className="grid gap-3 border-b border-slate-200 pb-6">
             <div className="flex flex-wrap items-center gap-3">
               <span className="rounded-full bg-slate-100 px-3 py-1 text-xs font-semibold uppercase tracking-[0.2em] text-slate-600">

@@ -3,7 +3,7 @@ export type TaskStatus = 'todo' | 'in-progress' | 'done'
 export type UnlockRule = 'all' | 'any'
 export type PriorityTag = 'low' | 'medium' | 'high'
 export type DifficultyTag = 'beginner' | 'intermediate' | 'advanced'
-export type SessionTag = 'session-1' | 'session-2-plus'
+export type SessionTag = 'session-1' | 'session-2'
 
 export interface TaskDefinition {
   id: string
@@ -28,15 +28,11 @@ export type ApiTaskProgress = Record<string, TaskProgress>
 export type BoardProgress = Record<ApiKey, ApiTaskProgress>
 
 export interface PersistedTaskState {
-  selectedApi: ApiKey | null
+  selectedApi: ApiKey
   progress: BoardProgress
 }
 
 export const TASK_BOARD_STORAGE_KEY = 'db-work-experience-task-board-v1'
-
-export const API_OPTIONS: Array<{ key: ApiKey; label: string }> = [
-  { key: 'pokeapi', label: 'PokeAPI' },
-]
 
 export const KANBAN_COLUMNS: Array<{ key: TaskStatus; label: string }> = [
   { key: 'todo', label: 'To Do' },
@@ -200,8 +196,7 @@ function buildTaskDefinitions(track: ApiTrackCopy): TaskDefinition[] {
       guideSlugs: ['fetching-api-data', 'react-basics', 'styling-with-tailwind'],
       priority: 'high',
       difficulty: 'beginner',
-      session: 'session-2-plus',
-      dependencies: [pageId],
+      session: 'session-2',
     },
     {
       id: detailRouteId,
@@ -217,7 +212,7 @@ function buildTaskDefinitions(track: ApiTrackCopy): TaskDefinition[] {
       guideSlugs: ['creating-a-route-and-page', 'adding-navigation-links', 'fetching-api-data', 'react-basics'],
       priority: 'high',
       difficulty: 'intermediate',
-      session: 'session-2-plus',
+      session: 'session-2',
       dependencies: [fetchListId],
     },
     {
@@ -233,7 +228,7 @@ function buildTaskDefinitions(track: ApiTrackCopy): TaskDefinition[] {
       guideSlugs: ['search-and-filtering', 'react-basics'],
       priority: 'medium',
       difficulty: 'intermediate',
-      session: 'session-2-plus',
+      session: 'session-2',
       dependencies: [fetchListId],
     },
     {
@@ -249,7 +244,7 @@ function buildTaskDefinitions(track: ApiTrackCopy): TaskDefinition[] {
       guideSlugs: ['search-and-filtering', 'styling-with-tailwind'],
       priority: 'medium',
       difficulty: 'advanced',
-      session: 'session-2-plus',
+      session: 'session-2',
       dependencies: [fetchListId, searchId],
     },
     {
@@ -265,7 +260,7 @@ function buildTaskDefinitions(track: ApiTrackCopy): TaskDefinition[] {
       guideSlugs: ['react-basics', 'search-and-filtering'],
       priority: 'low',
       difficulty: 'beginner',
-      session: 'session-2-plus',
+      session: 'session-2',
       dependencies: [fetchListId],
     },
     {
@@ -282,7 +277,7 @@ function buildTaskDefinitions(track: ApiTrackCopy): TaskDefinition[] {
       guideSlugs: ['adding-navigation-links', 'creating-a-route-and-page'],
       priority: 'medium',
       difficulty: 'beginner',
-      session: 'session-2-plus',
+      session: 'session-2',
       dependencies: [detailRouteId],
     },
     {
@@ -300,7 +295,7 @@ function buildTaskDefinitions(track: ApiTrackCopy): TaskDefinition[] {
       guideSlugs: ['search-and-filtering', 'react-basics'],
       priority: 'medium',
       difficulty: 'intermediate',
-      session: 'session-2-plus',
+      session: 'session-2',
       dependencies: [searchId, filterId],
     },
     {
@@ -317,7 +312,7 @@ function buildTaskDefinitions(track: ApiTrackCopy): TaskDefinition[] {
       guideSlugs: ['creating-a-route-and-page', 'fetching-api-data', 'react-basics'],
       priority: 'medium',
       difficulty: 'intermediate',
-      session: 'session-2-plus',
+      session: 'session-2',
       dependencies: [detailRouteId],
     },
     {
@@ -335,7 +330,7 @@ function buildTaskDefinitions(track: ApiTrackCopy): TaskDefinition[] {
       guideSlugs: ['styling-with-tailwind', 'react-basics'],
       priority: 'low',
       difficulty: 'intermediate',
-      session: 'session-2-plus',
+      session: 'session-2',
       dependencies: [fetchListId],
     },
     {
@@ -351,7 +346,7 @@ function buildTaskDefinitions(track: ApiTrackCopy): TaskDefinition[] {
       guideSlugs: ['saving-browser-data', 'react-basics'],
       priority: 'medium',
       difficulty: 'intermediate',
-      session: 'session-2-plus',
+      session: 'session-2',
       dependencies: [fetchListId, detailRouteId],
     },
     {
@@ -367,8 +362,7 @@ function buildTaskDefinitions(track: ApiTrackCopy): TaskDefinition[] {
       guideSlugs: ['building-forms', 'styling-with-tailwind', 'react-basics'],
       priority: 'medium',
       difficulty: 'advanced',
-      session: 'session-2-plus',
-      dependencies: [pageId],
+      session: 'session-2',
     },
     {
       id: collectionId,
@@ -383,7 +377,7 @@ function buildTaskDefinitions(track: ApiTrackCopy): TaskDefinition[] {
       guideSlugs: ['working-with-lists-and-sorting', 'saving-browser-data', 'react-basics'],
       priority: 'medium',
       difficulty: 'intermediate',
-      session: 'session-2-plus',
+      session: 'session-2',
       dependencies: [fetchListId],
     },
     {
@@ -399,7 +393,7 @@ function buildTaskDefinitions(track: ApiTrackCopy): TaskDefinition[] {
       guideSlugs: ['working-with-lists-and-sorting', 'react-basics'],
       priority: 'medium',
       difficulty: 'intermediate',
-      session: 'session-2-plus',
+      session: 'session-2',
       dependencies: [fetchListId],
     },
     {
@@ -415,7 +409,7 @@ function buildTaskDefinitions(track: ApiTrackCopy): TaskDefinition[] {
       guideSlugs: ['building-forms', 'saving-browser-data', 'react-basics'],
       priority: 'low',
       difficulty: 'intermediate',
-      session: 'session-2-plus',
+      session: 'session-2',
       dependencies: [detailRouteId],
     },
   ]
@@ -428,23 +422,21 @@ export const TASKS_BY_API: Record<ApiKey, TaskDefinition[]> = {
 }
 
 export function createDefaultTaskBoardState(): PersistedTaskState {
-  const progress = {} as PersistedTaskState['progress']
+  const apiProgress: ApiTaskProgress = {}
 
-  for (const option of API_OPTIONS) {
-    const apiTasks = TASKS_BY_API[option.key]
-    const apiProgress: ApiTaskProgress = {}
-
-    for (const task of apiTasks) {
-      apiProgress[task.id] = {
-        status: 'todo',
-        checks: task.acceptanceCriteria.map(() => false),
-      }
+  for (const task of TASKS_BY_API.pokeapi) {
+    apiProgress[task.id] = {
+      status: 'todo',
+      checks: task.acceptanceCriteria.map(() => false),
     }
-
-    progress[option.key] = apiProgress
   }
 
-  return { selectedApi: null, progress }
+  return {
+    selectedApi: 'pokeapi',
+    progress: {
+      pokeapi: apiProgress,
+    }
+  }
 }
 
 function normaliseTaskProgress(
@@ -501,10 +493,8 @@ export function loadTaskBoardState(): PersistedTaskState {
         ? (parsed.progress as Record<string, unknown>)
         : {}
 
-    const selected = parsed.selectedApi === 'pokeapi' ? parsed.selectedApi : null
-
     return {
-      selectedApi: selected,
+      selectedApi: 'pokeapi',
       progress: {
         pokeapi: normaliseTaskProgress('pokeapi', progress.pokeapi),
       },

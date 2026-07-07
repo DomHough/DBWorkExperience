@@ -1,61 +1,60 @@
 # Saving browser data
 
-Some newer tasks in this project need data to stay saved after a refresh.
+Some tasks need data to stay saved after a refresh. In this repo, the reusable pattern already exists as a hook.
 
-Examples:
+## Where to look in the repo
 
-- favourites
-- notes
-- a team or watchlist
-- custom created items
+- File: `src/hooks/useLocalStorageState.ts`
+- Around lines: `1` to `24`
 
-A simple way to do that in a front-end starter project is `localStorage`.
-
-## 1. Save state when it changes
+## 1. Before: plain state only
 
 ```tsx
-useEffect(() => {
-  window.localStorage.setItem('favourites', JSON.stringify(favourites))
-}, [favourites])
+const [favourites, setFavourites] = useState<string[]>([])
 ```
 
-## 2. Read saved data when the component starts
+This resets when the page refreshes.
+
+## 2. After: local storage backed state
 
 ```tsx
-const [favourites, setFavourites] = useState<string[]>(() => {
-  const raw = window.localStorage.getItem('favourites')
+const [favourites, setFavourites] = useLocalStorageState<string[]>(
+  'pokemon-favourites',
+  [],
+)
+```
 
-  if (!raw) {
-    return []
+## 3. The reusable hook already handles the save and load work
+
+Current code:
+
+```tsx
+function readValue<T>(key: string, fallback: T): T {
+  if (typeof window === 'undefined') {
+    return fallback
   }
 
   try {
-    return JSON.parse(raw) as string[]
+    const raw = window.localStorage.getItem(key)
+    return raw ? (JSON.parse(raw) as T) : fallback
   } catch {
-    return []
+    return fallback
   }
-})
+}
+
+export function useLocalStorageState<T>(key: string, fallback: T) {
+  const [value, setValue] = useState<T>(() => readValue(key, fallback))
+
+  useEffect(() => {
+    window.localStorage.setItem(key, JSON.stringify(value))
+  }, [key, value])
+
+  return [value, setValue] as const
+}
 ```
-
-## 3. Keep the saved shape simple
-
-Use data that is easy to understand, such as:
-
-- an array of ids
-- an array of small objects
-- a record keyed by id
-
-## 4. Use clear storage keys
-
-Examples:
-
-- `pokemon-favourites`
-- `pokemon-team`
-- `pokemon-notes`
 
 ## Common mistakes
 
-- Saving data that is much larger than necessary.
-- Forgetting `JSON.stringify()` when saving objects or arrays.
-- Forgetting `JSON.parse()` when reading objects or arrays.
-- Not handling invalid saved data safely.
+- Storing much more data than necessary.
+- Forgetting to `JSON.stringify()` or `JSON.parse()`.
+- Rewriting this logic in a page instead of reusing the hook.

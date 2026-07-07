@@ -1,115 +1,91 @@
 # React basics
 
-React builds interfaces out of components. In this project, students mainly use React to:
+React builds the app out of components, state, and JSX. In this repo, `src/pages/PokemonPage.tsx` is a good real example.
 
-- create pages
-- render lists
-- respond to clicks and form input
-- store data in state
-- fetch API data
+## Where to look in the repo
+
+- File: `src/pages/PokemonPage.tsx`
+- Around lines: `55` to `245`
 
 ## Components
 
 A component is a function that returns JSX.
 
+Before:
+
 ```tsx
-function WelcomeMessage() {
-  return <h1 className="text-2xl font-semibold">Hello</h1>
+export function PokemonPage() {
+  return <p>Pokemon page</p>
 }
 ```
 
-## Props
-
-Props let a parent component pass data into a child component.
+After:
 
 ```tsx
-interface ItemCardProps {
-  title: string
-}
+export function PokemonPage() {
+  useDocumentTitle('Pokemon Explorer')
 
-function ItemCard({ title }: ItemCardProps) {
-  return <h2>{title}</h2>
+  return (
+    <section className="space-y-6 pb-8">
+      <h1 className="text-3xl font-bold text-slate-900">Pokemon Explorer</h1>
+    </section>
+  )
 }
 ```
 
 ## State
 
-State is data that can change while the user is using the page.
+Before:
 
 ```tsx
-const [searchTerm, setSearchTerm] = useState('')
+const [searchText, setSearchText] = useState('')
 ```
 
-Common state in this project includes:
+After with more page state:
 
-- search text
-- selected filters
-- fetched items
-- favourites
-- custom notes
-- custom created items
+```tsx
+const [searchText, setSearchText] = useState('')
+const [selectedType, setSelectedType] = useState('all')
+const [sortMode, setSortMode] = useState<SortMode>('number')
+const [viewMode, setViewMode] = useState<ViewMode>('grid')
+```
 
 ## Events
 
-Update state in response to user actions.
+Current repo example:
 
 ```tsx
 <input
-  value={searchTerm}
-  onChange={(event) => setSearchTerm(event.target.value)}
+  type="search"
+  value={searchText}
+  onChange={(event) => setSearchText(event.target.value)}
 />
-```
-
-```tsx
-<button onClick={() => setShowFavourites((current) => !current)}>
-  Toggle favourites
-</button>
 ```
 
 ## Rendering lists
 
-Use `map()` to turn an array into UI.
+Current repo example:
 
 ```tsx
-<ul>
-  {items.map((item) => (
-    <li key={item.id}>{item.title}</li>
-  ))}
-</ul>
-```
-
-Each item needs a stable `key`.
-
-## Conditional rendering
-
-Show different UI depending on state.
-
-```tsx
-{isLoading ? <p>Loading...</p> : <ItemList items={items} />}
-```
-
-## Derived values
-
-Not everything needs its own state.
-
-If you already have `items`, `searchTerm`, and `selectedFilter`, you can often calculate the filtered list during rendering instead of storing another copy.
-
-```tsx
-const visibleItems = items.filter((item) =>
-  item.title.toLowerCase().includes(searchTerm.toLowerCase()),
-)
+{visiblePokemon.map((pokemon) => (
+  <Link key={pokemon.id} to={`/pokemon/${pokemon.name.toLowerCase()}`}>
+    {pokemon.name}
+  </Link>
+))}
 ```
 
 ## Effects
 
-Use `useEffect` for work outside rendering, such as fetching data or saving to browser storage.
+Current repo example:
 
 ```tsx
 useEffect(() => {
-  window.localStorage.setItem('saved-search', searchTerm)
-}, [searchTerm])
+  const controller = new AbortController()
+  void loadPokemonPage()
+  return () => controller.abort()
+}, [offset])
 ```
 
 ## Rule of thumb
 
-If you can calculate something from existing props or state, calculate it directly. Use `useEffect` only when you are synchronising with something outside React.
+If data can be calculated from existing state, calculate it during rendering instead of storing another copy.

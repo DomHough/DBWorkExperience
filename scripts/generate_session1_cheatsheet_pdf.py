@@ -13,9 +13,7 @@ from reportlab.lib.styles import ParagraphStyle, getSampleStyleSheet
 from reportlab.lib.units import mm
 from reportlab.pdfbase.pdfmetrics import stringWidth
 from reportlab.platypus import (
-    PageBreak,
     Paragraph,
-    Preformatted,
     SimpleDocTemplate,
     Spacer,
     Table,
@@ -26,179 +24,75 @@ from reportlab.platypus import (
 
 ROOT = Path(__file__).resolve().parents[1]
 OUTPUT = ROOT / "docs" / "session-1-starter-cheatsheet-print.pdf"
+SOURCE = ROOT / "docs" / "session-1-starter-cheatsheet.md"
 
 
-CHEATSHEET = {
-    "title": "DB Work Experience Session 1 Cheatsheet",
-    "subtitle": "Volunteer handout for printing",
-    "sections": [
-        {
-            "heading": "Setup Commands",
-            "items": [
-                {"type": "paragraph", "text": "Enable pnpm if needed:"},
-                {"type": "code", "text": "corepack enable"},
-                {"type": "paragraph", "text": "Install the project:"},
-                {"type": "code", "text": "pnpm install"},
-                {"type": "paragraph", "text": "Sign in to Codex:"},
-                {"type": "code", "text": "codex login --device-auth"},
-                {"type": "paragraph", "text": "Start the app:"},
-                {"type": "code", "text": "pnpm dev"},
-                {
-                    "type": "paragraph",
-                    "text": "Open the app in your browser using the local URL shown in the terminal. It will usually be:",
-                },
-                {"type": "code", "text": "http://localhost:5173"},
-            ],
-        },
-        {
-            "heading": "Session 1 Tasks",
-            "items": [
-                {
-                    "type": "paragraph",
-                    "text": "Session 1 is for small, beginner-friendly changes. Focus on getting something visible working without building the full API feature yet.",
-                }
-            ],
-        },
-        {
-            "heading": "Task 1: Change the background colour",
-            "items": [
-                {"type": "paragraph", "text": "Use Tailwind classes in JSX."},
-                {
-                    "type": "paragraph",
-                    "text": "Look in src/App.tsx for className values such as:",
-                },
-                {
-                    "type": "code",
-                    "text": '<div className="flex min-h-screen flex-col bg-slate-100 text-slate-900">',
-                },
-                {
-                    "type": "paragraph",
-                    "text": "You can change bg-slate-100 to another Tailwind colour, for example:",
-                },
-                {
-                    "type": "code",
-                    "text": '<div className="flex min-h-screen flex-col bg-amber-50 text-slate-900">',
-                },
-            ],
-        },
-        {
-            "heading": "Task 2: Create the list page and route",
-            "items": [
-                {"type": "paragraph", "text": "Create a new page file in src/pages/."},
-                {"type": "bullet", "text": "PokemonPage.tsx"},
-                {"type": "bullet", "text": "FilmsPage.tsx"},
-                {"type": "paragraph", "text": "Starter example:"},
-                {
-                    "type": "code",
-                    "text": """export function PokemonPage() {
-  return (
-    <section className="mx-auto w-full max-w-4xl space-y-4">
-      <h1 className="text-3xl font-bold text-slate-900">Pokemon</h1>
-      <p className="text-slate-700">This page will show a list of Pokemon.</p>
-    </section>
-  )
-}""",
-                },
-                {"type": "paragraph", "text": "Then import it into src/App.tsx and add a route."},
-                {"type": "code", "text": "import { PokemonPage } from './pages/PokemonPage'"},
-                {"type": "code", "text": '<Route path="/pokemon" element={<PokemonPage />} />'},
-                {"type": "bullet", "text": "Use the same pattern for a films page."},
-                {"type": "bullet", "text": "page: FilmsPage.tsx"},
-                {"type": "bullet", "text": "route: /films"},
-                {
-                    "type": "paragraph",
-                    "text": "The page only needs a heading and a short paragraph for Session 1.",
-                },
-            ],
-        },
-        {
-            "heading": "Task 3: Add a navbar link to the list page",
-            "items": [
-                {"type": "paragraph", "text": "Open src/components/Navbar.tsx."},
-                {"type": "paragraph", "text": "Add another NavLink like the others:"},
-                {
-                    "type": "code",
-                    "text": """<NavLink
-  to="/pokemon"
-  className={({ isActive }) =>
-    isActive ? `${navBaseClass} bg-blue-100 text-blue-700` : navBaseClass
-  }
->
-  Pokemon
-</NavLink>""",
-                },
-                {
-                    "type": "paragraph",
-                    "text": "For a films page, change the path and text to match your route.",
-                },
-            ],
-        },
-        {
-            "heading": "Task 4: Update the home page text",
-            "items": [
-                {
-                    "type": "paragraph",
-                    "text": "The home page is inside src/App.tsx in the HomePage function.",
-                },
-                {"type": "paragraph", "text": "You can change text such as:"},
-                {
-                    "type": "code",
-                    "text": """<span className="text-xl font-semibold uppercase tracking-[0.24em] text-slate-900">
-  DB Work Experience
-</span>""",
-                },
-                {"type": "paragraph", "text": "Example changes:"},
-                {"type": "bullet", "text": "My Pokemon Project"},
-                {"type": "bullet", "text": "My Film Finder"},
-            ],
-        },
-        {
-            "heading": "Task 5: Change the browser tab title",
-            "items": [
-                {"type": "paragraph", "text": "Open index.html."},
-                {"type": "paragraph", "text": "Look for the <title> tag:"},
-                {"type": "code", "text": "<title>DB Work Experience Starter</title>"},
-                {
-                    "type": "paragraph",
-                    "text": "Change it to something that matches your project, for example:",
-                },
-                {"type": "code", "text": "<title>My Pokemon Project</title>"},
-            ],
-        },
-        {
-            "heading": "Task 6: Add a button on the home page",
-            "items": [
-                {
-                    "type": "paragraph",
-                    "text": "Still in src/App.tsx, add a link or button on the home page that sends the user to your list page.",
-                },
-                {
-                    "type": "paragraph",
-                    "text": "A simple option is a Link from react-router-dom.",
-                },
-                {"type": "paragraph", "text": "First, make sure Link is imported:"},
-                {
-                    "type": "code",
-                    "text": "import { Link, Navigate, Route, Routes, useLocation } from 'react-router-dom'",
-                },
-                {"type": "paragraph", "text": "Then add something like this inside HomePage:"},
-                {
-                    "type": "code",
-                    "text": """<Link
-  to="/pokemon"
-  className="inline-flex rounded-xl bg-blue-600 px-4 py-2 font-semibold text-white hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-400"
->
-  Open Pokemon List
-</Link>""",
-                },
-                {
-                    "type": "paragraph",
-                    "text": "For a films page, update the path and button text to match your route.",
-                },
-            ],
-        },
-    ],
-}
+def load_cheatsheet() -> dict[str, object]:
+    lines = SOURCE.read_text(encoding="utf-8").splitlines()
+    title = "DB Work Experience Session 1 Cheatsheet"
+    subtitle = "Volunteer handout for printing"
+    sections: list[dict[str, object]] = []
+    current_section: dict[str, object] | None = None
+    current_paragraph: list[str] = []
+    index = 0
+
+    def flush_paragraph() -> None:
+        nonlocal current_paragraph
+        if current_section is None or not current_paragraph:
+            current_paragraph = []
+            return
+        text = " ".join(part.strip() for part in current_paragraph).strip()
+        if text:
+            current_section["items"].append({"type": "paragraph", "text": text})
+        current_paragraph = []
+
+    while index < len(lines):
+        line = lines[index]
+        stripped = line.strip()
+
+        if stripped.startswith("# "):
+            title = stripped[2:].strip()
+            index += 1
+            continue
+
+        if stripped.startswith("## "):
+            flush_paragraph()
+            current_section = {"heading": stripped[3:].strip(), "items": []}
+            sections.append(current_section)
+            index += 1
+            continue
+
+        if current_section is None:
+            index += 1
+            continue
+
+        if stripped.startswith("```"):
+            flush_paragraph()
+            code_lines: list[str] = []
+            index += 1
+            while index < len(lines) and not lines[index].strip().startswith("```"):
+                code_lines.append(lines[index])
+                index += 1
+            current_section["items"].append({"type": "code", "text": "\n".join(code_lines)})
+            index += 1
+            continue
+
+        if stripped.startswith("- "):
+            flush_paragraph()
+            current_section["items"].append({"type": "bullet", "text": stripped[2:].strip()})
+            index += 1
+            continue
+
+        if stripped:
+            current_paragraph.append(stripped)
+        else:
+            flush_paragraph()
+
+        index += 1
+
+    flush_paragraph()
+
+    return {"title": title, "subtitle": subtitle, "sections": sections}
 
 
 def wrap_code(text: str, font_name: str, font_size: float, max_width: float) -> str:
@@ -289,6 +183,7 @@ def header_footer(canvas, doc):
 
 def build_pdf() -> None:
     OUTPUT.parent.mkdir(parents=True, exist_ok=True)
+    cheatsheet = load_cheatsheet()
 
     page_width, page_height = landscape(A4)
     doc = SimpleDocTemplate(
@@ -298,7 +193,7 @@ def build_pdf() -> None:
         rightMargin=14 * mm,
         topMargin=16 * mm,
         bottomMargin=14 * mm,
-        title=CHEATSHEET["title"],
+        title=cheatsheet["title"],
         author="OpenAI Codex",
     )
 
@@ -355,13 +250,11 @@ def build_pdf() -> None:
     code_width = doc.width - 20 * mm
 
     story = [
-        Paragraph(CHEATSHEET["title"], title_style),
-        Paragraph(CHEATSHEET["subtitle"], subtitle_style),
+        Paragraph(cheatsheet["title"], title_style),
+        Paragraph(cheatsheet["subtitle"], subtitle_style),
     ]
 
-    for index, section in enumerate(CHEATSHEET["sections"]):
-        if index in {4}:
-            story.append(PageBreak())
+    for section in cheatsheet["sections"]:
         story.append(Paragraph(section["heading"], heading_style))
         for item in section["items"]:
             item_type = item["type"]

@@ -1,65 +1,70 @@
 # Working with lists and sorting
 
-Many tasks in this project depend on working with arrays of data.
+Many tasks in this project depend on working with arrays of data. The Pokemon page already includes a small sorting helper.
 
-Examples:
+## Where to look in the repo
 
-- rendering API results
-- sorting by name or year
-- building a team or watchlist
-- showing favourites first
+- File: `src/pages/PokemonPage.tsx`
+- Around lines: `41` to `53`, `62`, `127` to `138`, `199` to `208`
 
-## Render a list with `map()`
+## 1. Render a list with `map()`
+
+Before:
 
 ```tsx
 <ul>
   {items.map((item) => (
-    <li key={item.id}>{item.title}</li>
+    <li key={item.id}>{item.name}</li>
   ))}
 </ul>
 ```
 
-Use a stable key if possible.
-
-## Sort without mutating the original array
-
-JavaScript array sorting changes the original array, so copy it first.
+After in this project:
 
 ```tsx
-const sortedItems = [...items].sort((a, b) => a.title.localeCompare(b.title))
+{visiblePokemon.map((pokemon) => (
+  <Link key={pokemon.id} to={`/pokemon/${pokemon.name.toLowerCase()}`}>
+    {pokemon.name}
+  </Link>
+))}
 ```
 
-## Add sort state
+## 2. Sort without mutating the original array
+
+Current repo code:
 
 ```tsx
-const [sortOrder, setSortOrder] = useState('title-asc')
+function sortPokemon(items: PokemonListItem[], sortMode: SortMode) {
+  const sortedItems = [...items]
+
+  sortedItems.sort((firstItem, secondItem) => {
+    if (sortMode === 'name') {
+      return firstItem.name.localeCompare(secondItem.name)
+    }
+
+    return firstItem.id - secondItem.id
+  })
+
+  return sortedItems
+}
 ```
 
-Then choose the sorting logic from that value.
+## 3. Add sort state
+
+Before:
 
 ```tsx
-const sortedItems = [...visibleItems].sort((a, b) => {
-  if (sortOrder === 'title-asc') {
-    return a.title.localeCompare(b.title)
-  }
-
-  if (sortOrder === 'title-desc') {
-    return b.title.localeCompare(a.title)
-  }
-
-  return 0
-})
+const [sortMode, setSortMode] = useState('number')
 ```
 
-## Good uses in this project
+After:
 
-- alphabetical sorting
-- newest to oldest films
-- rating order
-- showing saved items in the order they were added
+```tsx
+const [sortMode, setSortMode] = useState<SortMode>('number')
+```
 
 ## Common mistakes
 
 - Sorting the original state array directly.
-- Adding sorting before the list itself works.
-- Creating very complex sort logic too early.
+- Building sorting before the list itself works.
+- Using an unstable `key` when rendering repeated items.
