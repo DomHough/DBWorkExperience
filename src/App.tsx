@@ -4,8 +4,6 @@ import { Navbar } from './components/Navbar'
 import pokeLogo from './assets/db_pokeball.svg'
 import { useDocumentTitle } from './hooks/useDocumentTitle'
 import { GuidesPage } from './pages/GuidesPage'
-import { PokemonDetailPage } from './pages/PokemonDetailPage'
-import { PokemonPage } from './pages/PokemonPage'
 import { SettingsPage } from './pages/SettingsPage'
 import { TasksPage } from './pages/TasksPage'
 
@@ -18,30 +16,29 @@ function HomePage({ logoSrc }: { logoSrc: string }) {
         <div className="space-y-6">
           <div className="space-y-3">
             <p className="text-sm font-semibold uppercase tracking-[0.24em] text-amber-700">
-              Pokemon API Starter
+              API Starter Project
             </p>
             <h1 className="text-4xl font-bold tracking-tight text-slate-900 sm:text-5xl">
-              Build a simple Pokemon feature in small steps
+              Build a simple API feature in small steps
             </h1>
             <p className="max-w-2xl text-base leading-7 text-slate-700">
-              Start with a page and a route, then fetch real Pokemon from PokeAPI,
-              add a detail page, and improve the experience with search, filtering,
-              and pagination.
+              Start from the task board, choose an API track, and build a small
+              list-and-detail feature with search, filtering, and navigation.
             </p>
           </div>
 
           <div className="flex flex-wrap gap-3">
             <Link
-              to="/pokemon"
+              to="/tasks"
               className="inline-flex rounded-2xl bg-slate-900 px-5 py-3 text-sm font-semibold text-white transition hover:bg-slate-800 focus:outline-none focus:ring-2 focus:ring-amber-300"
             >
-              Open Pokemon List
+              Open Task Board
             </Link>
             <Link
-              to="/tasks"
+              to="/guides"
               className="inline-flex rounded-2xl border border-slate-300 px-5 py-3 text-sm font-semibold text-slate-700 transition hover:border-slate-400 hover:bg-white/80"
             >
-              View Task Board
+              Browse Guides
             </Link>
           </div>
         </div>
@@ -91,8 +88,6 @@ function App() {
           <Route path="/settings" element={<SettingsPage />} />
           <Route path="/guides" element={<GuidesPage />} />
           <Route path="/guides/:slug" element={<GuidesPage />} />
-          <Route path="/pokemon" element={<PokemonPage />} />
-          <Route path="/pokemon/:name" element={<PokemonDetailPage />} />
           <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>
       </main>

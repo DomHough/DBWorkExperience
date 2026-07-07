@@ -9,7 +9,7 @@ export function SettingsPage() {
 
   function handleReset() {
     saveTaskBoardState(createDefaultTaskBoardState())
-    setFeedback('Task progress has been reset to the default Pokemon starting state.')
+    setFeedback('Task progress has been reset to the default starter state.')
   }
 
   return (
@@ -35,7 +35,7 @@ export function SettingsPage() {
           <div className="grid gap-1">
             <h2 className="text-lg font-semibold text-slate-900">Reset Task Progress</h2>
             <p className="text-sm leading-6 text-slate-600">
-              Clears saved task progress and returns the board to the default Pokemon
+              Clears saved task progress and returns the board to the default
               starter tasks.
             </p>
           </div>
