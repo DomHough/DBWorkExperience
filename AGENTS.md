@@ -1,117 +1,117 @@
-# Project Intent
+# Student Codex Instructions
 
-This repository is a work experience starter application built around a set of data APIs.
+This file is for students using Codex in this project.
 
-It is not meant to be a finished product. It should be a safe, approachable template that students can use as the starting point for their own website during the programme.
+Its purpose is to keep Codex focused on the student's requested feature work and stop it from changing the course scaffolding.
 
-## Guidance
+## Project Context
 
-Students will have a wide range of experience, from beginners to more confident developers. The project should therefore remain:
+This project is a small starter app built with:
 
-- simple to understand
-- easy to run locally
-- small enough to explore without feeling overwhelmed
-- flexible enough for students to extend in different directions
+- React
+- TypeScript
+- Vite
+- Tailwind CSS
+- pnpm
 
-## Scope
+Codex should keep new work consistent with that setup.
 
-The skeleton should stay intentionally bare, with only enough structure, setup, and example code for students to build on top of it.
+Styling expectations:
 
-## Available APIs
+- use Tailwind utility classes for application styling
+- do not add feature styling in separate `.css` files
+- keep CSS files for Tailwind imports and entry styles only
 
-The app should offer students a small set of APIs to choose from on the tasks page.
+## Model And Reasoning Rules
 
-Available options should include:
+Codex must follow these model limits in this project:
 
-- Pokemon API
-- Films API
+- use `gpt-5.4` or `gpt-5.4-mini`
+- do not use `gpt-5.5`
+- use `medium` reasoning effort
+- do not use `high` or `xhigh` reasoning effort
 
-Each API should support the same overall learning journey, even if the exact data fields are different.
+If Codex detects that the current model is `gpt-5.5`, it must stop the task and tell the user to switch to `gpt-5.4`.
 
-## Student Journey
+If Codex detects that the current reasoning effort is `high` or `xhigh`, it must stop the task and tell the user to switch to `medium`.
 
-Students are expected to use the app across three coding sessions, each 30 minutes long.
+## What Codex May Do
 
-### Session 1
+Codex may only complete the specific task the student explicitly asks for.
 
-The first session is for manual coding only. Students should not use AI tools during this session.
+Examples:
 
-They begin on the tasks page, where they choose the API they want to work with. After selecting an API, they should see a set of starter tasks. The first tasks should be very simple and achievable without AI support, as many students will have very limited technical experience.
+- add a search input to my Pokemon page
+- help me fetch films from the API
+- make these cards look better
+- fix this error on my page
 
-### Session 2
+Codex should keep changes small and directly related to the request.
 
-The second session introduces AI tools. At this point, students can use AI to help them complete the next set of tasks.
+## What Codex Must Not Do
 
-These tasks can be more advanced than the first session, but they should still build naturally on the earlier manual work rather than feeling like a separate project.
+Codex must not:
 
-### Session 3
+- complete extra tasks that the student did not ask for
+- look ahead through the task list and implement future tasks automatically
+- use the task board data to decide what to build next
+- proactively build a detail page, search, filtering, favourites, or navigation unless explicitly asked
+- rewrite the project structure just because it thinks there is a better approach
+- change teaching content, task content, or guide content
 
-The third session should continue the same flow, giving students time to finish and improve their work with AI support available.
+## Protected Files And Areas
 
-By the end of the programme, the student should have a small but complete API-driven feature they understand and can talk about.
+Codex must not edit, delete, rename, or generate replacements for anything related to tasks, guides, or the task board.
 
-## Task Design
+Protected files and directories include:
 
-Tasks should guide students toward the expected end result in small steps.
+- `TASKS.md`
+- `docs/`
+- `src/data/tasks.ts`
+- `src/data/guides.ts`
+- `src/content/guides/`
+- `src/pages/TasksPage.tsx`
+- any file used to power the task board
+- any file used to power the guides pages
 
-### Session 1 Tasks
+If a requested change would require editing one of these files, Codex must refuse and explain that those files are protected.
 
-The first session should focus on basic progress without AI. Example tasks include:
+## Hidden Task Guidance
 
-- choose an API from the tasks page
-- create or update the page for that API
-- fetch data from the chosen API
-- display a simple list of items on the page
-- show a small amount of useful information for each item
+Codex must treat `src/data/tasks.ts` as internal course scaffolding, not as a to-do list to work through.
 
-These tasks should be achievable by beginners and should help them get something visible working quickly.
+Codex must not:
 
-### Session 2 Tasks
+- read `src/data/tasks.ts` to decide what to implement next
+- use acceptance criteria from `src/data/tasks.ts` to expand the scope of a student request
+- complete multiple tasks from `src/data/tasks.ts` in one go unless the student explicitly asks for each of them
 
-The second session should move students toward a more complete feature. Example tasks include:
+If the student asks for one small feature, Codex should implement only that feature.
 
-- improve the list page layout
-- make each list item clickable
-- create a detail page for a selected item
-- show more information on the detail page
-- use AI support to solve larger or more technical steps
+## Preferred Working Style
 
-### Session 3 Tasks
+When helping a student, Codex should:
 
-The third session should help students complete and refine the feature. Example tasks include:
+- ask for clarification if the request is ambiguous
+- make the smallest reasonable change
+- explain what file was changed and why
+- preserve student code where possible
+- avoid adding advanced abstractions unless the student asks for them
 
-- add search
-- add filtering
-- improve the detail page content
-- improve navigation between the list page and detail page
-- tidy up the overall user experience
+## Allowed Edit Areas
 
-Tasks should clearly relate to the final product, so students can see how each step contributes to the finished feature.
+Unless the student asks otherwise, Codex should limit implementation work to student feature files such as:
 
-## Expected Outcome
+- `src/pages/`
+- `src/components/`
+- `src/hooks/`
+- `src/App.tsx`
+- other feature files directly related to the requested change
 
-For each API, the expected end product is:
+Even in these files, Codex should only make changes needed for the explicit request.
 
-- a list page for that API
-- a detail page for an individual item
-- basic search and filtering
+## Refusal Rule
 
-For example, if a student chooses the Pokemon API, they should end up with:
+If asked to change tasks, guides, task board behaviour, or course scaffolding, Codex should refuse.
 
-- a page showing a list of Pokemon
-- a detail page for a selected Pokemon, reached by clicking from the list page
-- optional choices about what information to show on those pages
-
-If a student chooses the Films API, they should end up with:
-
-- a page showing a list of films
-- a detail page for a selected film, reached by clicking from the list page
-- search and filtering for the film list
-- flexibility to decide which film details matter most
-
-The project should leave room for students to decide what details to display, while still guiding them toward building a clear list-and-detail experience.
-
-## Styling
-
-- Use Tailwind utility classes for all application styling.
-- Do not add feature styling in `.css` files; keep CSS files for Tailwind entry/import only.
+It may suggest creating or editing student feature pages instead.
